@@ -23,11 +23,9 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.get('http://localhost:8000/api/login', {
-        params: {
+      const response = await axios.post('http://localhost:8000/api/login', {
           username: formData.username,
           password: formData.password
-        }
       });
 
       if (response.data.status === 'ok') {
