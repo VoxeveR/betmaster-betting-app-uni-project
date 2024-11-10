@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import {
   Container,
   Row,
@@ -14,6 +15,8 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 const Register = () => {
   const [formData, setFormData] = useState({
+    name: '',
+    lastname: '',
     email: '',
     pesel: '',
     password: '',
@@ -80,7 +83,19 @@ const Register = () => {
         throw new Error("Musisz mieć ukończone 18 lat aby się zarejestrować");
       }
 
-      navigate('/login');
+      const response = await axios.post('http://localhost:8000/api/register', {
+        name: formData.name,
+        lastname: formData.lastname,
+        email: formData.email,
+        password: formData.password,
+        pesel: formData.pesel,
+        verified: false
+      });
+      if (response.data.status === 'ok') {
+        console.log('Zalogowano pomyślnie');
+        navigate('/login');
+      }
+      
     } catch (err) {
       setError(err.message || 'Błąd rejestracji. Spróbuj ponownie.');
       e.stopPropagation();
@@ -111,6 +126,37 @@ const Register = () => {
                 )}
 
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
+                <FloatingLabel controlId="name" label="Name" className="mb-3">
+                    <Form.Control
+                        type="Name"
+                        placeholder="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        pattern="[a-zA-Z]{2,40}"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Jakub Lipka
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+                
+
+                  <FloatingLabel controlId="lastname" label="Last Name" className="mb-3">
+                    <Form.Control
+                        type="lastname"
+                        placeholder="Last name"
+                        name="lastname"
+                        value={formData.lastname}
+                        onChange={handleChange}
+                        required
+                        pattern="[a-zA-Z]{2,40}"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Jakub Lipka
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+
                   <FloatingLabel controlId="email" label="Email" className="mb-3">
                     <Form.Control
                         type="email"
