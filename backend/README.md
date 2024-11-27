@@ -3,6 +3,7 @@
 1. Setup virtual enviroment
 
 ```
+cd backend
 pip install virtualenv
 virtualenv venv
 ```
