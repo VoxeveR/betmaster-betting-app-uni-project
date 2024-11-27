@@ -3,8 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import EmailStr
 from sqlalchemy.orm import Session
 from starlette import status
-from .database.database import get_db, User
-from  .models import Login, UserReg
+from database.database import get_db, User
+from models import Login, UserReg
 
 app = FastAPI()
 
