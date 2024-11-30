@@ -17,9 +17,17 @@ Project created for Software engineering class on Carcow University of Technolog
 git clone https://github.com/VoxeveR/SE_Uni_Project_Betting_App.git
 ```
 
+Setup backend:
+
 [Backend-Setup](backend/README.md)
 
+Setup frontend:
+
 [Frontend-Setup](frontend/README.md)
+
+Setup database:
+
+[Database-Setup](database/README.md)
 
 ## Technologies
 - Python3
