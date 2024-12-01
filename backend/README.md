@@ -40,9 +40,27 @@ If you are using PyCharm just add fastapi configuration to run it. If you have a
 
 [JetBrains-Setup-FastApi](https://www.jetbrains.com/help/pycharm/fastapi-project.html)
 
+Remeber to add this into your configuration into uvicorn options
+
+```
+--reload --log-config=log_conf.yaml
+```
+
 Run by command line:
 ```
-uvicorn main:app --host 0.0.0.0 --port 8080
+uvicorn main:app --host 0.0.0.0 --port 8080 --reload --log-config=log_conf.yaml
 ```
 
 **_NOTE:_** You can change ip address and port number
+
+4. Add .env file
+
+File should look like this
+
+```
+USER_DB=
+PASS_DB=
+IP_DB=
+PORT_DB=
+DATABASE=
+```

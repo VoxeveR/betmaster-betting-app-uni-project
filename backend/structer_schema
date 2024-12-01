@@ -1,0 +1,64 @@
+bookmaker_project/
+├── alembic/               # Migracje bazy danych
+│   └── versions/
+├── app/
+│   ├── api/              # Endpointy API
+│   │   ├── v1/
+│   │   │   ├── endpoints/
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── users.py
+│   │   │   │   ├── bets.py
+│   │   │   │   ├── events.py
+│   │   │   │   ├── payments.py
+│   │   │   │   └── odds.py
+│   │   │   └── api.py
+│   │   └── deps.py      # Zależności API (np. auth)
+│   ├── core/            # Główne komponenty
+│   │   ├── config.py    # Konfiguracja
+│   │   ├── security.py  # Bezpieczeństwo
+│   │   └── logging.py   # Konfiguracja logowania
+│   ├── db/              # Warstwa bazy danych
+│   │   ├── base.py
+│   │   ├── session.py
+│   │   └── init_db.py
+│   ├── models/          # Modele SQLAlchemy
+│   │   ├── user.py
+│   │   ├── bet.py
+│   │   ├── event.py
+│   │   ├── payment.py
+│   │   └── odds.py
+│   ├── schemas/         # Pydantic schemas
+│   │   ├── user.py
+│   │   ├── bet.py
+│   │   ├── event.py
+│   │   ├── payment.py
+│   │   └── odds.py
+│   ├── services/        # Logika biznesowa
+│   │   ├── user.py
+│   │   ├── bet.py
+│   │   ├── event.py
+│   │   ├── payment.py
+│   │   ├── odds.py
+│   │   └── risk_management.py
+│   ├── utils/           # Narzędzia pomocnicze
+│   │   ├── validators.py
+│   │   └── calculations.py
+│   └── worker/          # Zadania w tle (Celery)
+│       ├── celery_app.py
+│       └── tasks.py
+├── tests/               # Testy
+│   ├── conftest.py
+│   ├── api/
+│   │   └── v1/
+│   │       ├── test_auth.py
+│   │       ├── test_bets.py
+│   │       └── test_events.py
+│   ├── services/
+│   └── utils/
+├── .env                 # Zmienne środowiskowe
+├── .gitignore
+├── docker-compose.yml   # Konfiguracja kontenerów
+├── Dockerfile
+├── requirements.txt     # Zależności projektu
+├── alembic.ini         # Konfiguracja migracji
+└── main.py             # Punkt wejścia aplikacji

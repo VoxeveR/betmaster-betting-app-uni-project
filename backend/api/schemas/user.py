@@ -1,3 +1,4 @@
+from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from dataclasses import dataclass
 
@@ -6,11 +7,10 @@ class Login(BaseModel):
     email: EmailStr
     password: str
 
-@dataclass
+
 class UserReg(BaseModel):
-    name: str
-    lastname: str
-    email: EmailStr
+    username: str
     password: str
-    pesel: int
-    verified: bool
+    name: str
+    surname: str
+    email: EmailStr
