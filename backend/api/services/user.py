@@ -1,7 +1,9 @@
 from pydantic import EmailStr
 from api.database.models.user import User
+from api.database.models.user_roles import UserRoles, Role
 from sqlalchemy.orm import Session
 from api.schemas.user import UserReg
+from api.core.logging import logger
 
 
 def verify(password: str, user_password: str) -> bool:
@@ -26,6 +28,7 @@ def checkUserExist(email: EmailStr, db: Session) -> bool:
 
 def create_user(user: UserReg, db: Session):
     try:
+
         new_user = User(
             username=user.username,
             password=user.password,
@@ -34,10 +37,18 @@ def create_user(user: UserReg, db: Session):
             email=str(user.email),
         )
         db.add(new_user)
+        db.flush()
+
+        new_role = UserRoles(
+            user_id=new_user.user_id,
+            role_name=Role.USER,
+        )
+        db.add(new_role)
+
         db.commit()
-        db.refresh(new_user)
+
         return True
     except Exception as e:
-        print(e)
+        logger.error(e)
         db.rollback()
         return False
