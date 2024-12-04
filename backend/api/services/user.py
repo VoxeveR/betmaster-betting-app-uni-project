@@ -5,20 +5,6 @@ from sqlalchemy.orm import Session
 from api.schemas.user import UserReg
 from api.core.logging import logger
 
-
-def verify(password: str, user_password: str) -> bool:
-    return password == user_password
-
-
-def auth_user(email: EmailStr, password: str, db: Session) -> bool:
-    user  = db.query(User).filter(User.email == email).first()
-    if not user:
-        return False
-    if not verify(password, str(user.password)):
-        return False
-    return True
-
-
 def checkUserExist(email: EmailStr, db: Session) -> bool:
     user = db.query(User).filter(User.email == email).first()
     if not user:
