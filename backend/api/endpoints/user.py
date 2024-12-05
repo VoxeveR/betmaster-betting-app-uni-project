@@ -9,10 +9,6 @@ from api.schemas.user import UserReg
 
 router = APIRouter()
 
-
-
-
-
 @router.post("/register")
 async def register(user: UserReg, db: Session = Depends(get_db)):
     if not user.email or not user.password or not user.name or not user.surname:
@@ -34,3 +30,11 @@ async def register(user: UserReg, db: Session = Depends(get_db)):
         )
 
     return {"status": "ok"}
+
+@router.get("/me/{user_id}")
+async def me(user_id: int, db: Session = Depends(get_db)):
+    pass
+
+@router.get("/update/{user_id}")
+async def update(user_id: int, db: Session = Depends(get_db)):
+    pass

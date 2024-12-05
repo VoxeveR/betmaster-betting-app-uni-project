@@ -13,10 +13,14 @@ async def login(login: Login, db: Session = Depends(get_db)):
             detail="No username or password provided",
         )
 
-    if not auth_user(login.email, login.password, db):
+    resp = auth_user(login.email, login.password, db)
+    if resp is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password",
         )
 
-    return {"status": "ok"}
+    return {
+        "status": "ok",
+        "data": resp,
+    }
