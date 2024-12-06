@@ -12,7 +12,6 @@ def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
             User.user_id,
             User.email,
             User.username,
-            User.password,
             UserRoles.role_name).join(UserRoles).filter(User.email == str(email)).first()
 
     if not user:
@@ -24,6 +23,5 @@ def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
         'user_id': user.user_id,
         'email': user.email,
         'username': user.username,
-        'password': user.password,
         'role': user.role_name.value
     }

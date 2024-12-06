@@ -33,8 +33,11 @@ async def register(user: UserReg, db: Session = Depends(get_db)):
 
 @router.get("/me/{user_id}")
 async def me(user_id: int, db: Session = Depends(get_db)):
+    # Zwracacć wszystko oprócz hasła, peselu i nr_dowodu
     pass
 
 @router.get("/update/{user_id}")
 async def update(user_id: int, db: Session = Depends(get_db)):
+    # Zwrócic tylko zmienione dane
+    # dodać pola aktywne w zakładach
     pass

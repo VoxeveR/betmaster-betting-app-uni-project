@@ -62,3 +62,12 @@ bookmaker_project/
 ├── requirements.txt     # Zależności projektu
 ├── alembic.ini         # Konfiguracja migracji
 └── main.py             # Punkt wejścia aplikacji
+
+
+http://localhost:8000/api/users/update/{}
+
+{
+
+    "email": "example"
+
+}
