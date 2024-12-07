@@ -4,6 +4,7 @@ from api.database.models.user_roles import UserRoles, Role
 from sqlalchemy.orm import Session
 from api.schemas.user import UserReg
 from api.core.logging import logger
+from api.core.security import hash_password
 
 def checkUserExist(email: EmailStr, db: Session) -> bool:
     user = db.query(User).filter(User.email == email).first()
@@ -17,7 +18,7 @@ def create_user(user: UserReg, db: Session):
 
         new_user = User(
             username=user.username,
-            password=user.password,
+            password=hash_password(user.password),
             name=user.name,
             surname=user.surname,
             email=str(user.email),
