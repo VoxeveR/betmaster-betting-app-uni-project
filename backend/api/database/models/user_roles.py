@@ -1,5 +1,6 @@
 import enum
 from sqlalchemy import Column, Integer, Enum, ForeignKey
+from api.database.init_db import Base
 
 class Role(enum.Enum):
     USER = 'USER'
