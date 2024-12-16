@@ -1,22 +1,24 @@
 from pydantic import EmailStr
 from typing_extensions import Optional
 from api.database.models.user import User
+from api.core.security import verify_password
 from api.database.models.user_roles import UserRoles
 from sqlalchemy.orm import Session
 
-def verify(password: str, user_password: str) -> bool:
-    return password == user_password
+
 
 def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
     user = db.query(
             User.user_id,
             User.email,
+            User.password,
             User.username,
             UserRoles.role_name).join(UserRoles).filter(User.email == str(email)).first()
 
+
     if not user:
         return None
-    if not verify(password, str(user.password)):
+    if not verify_password(password, user.password.encode('utf-8')):
         return None
 
     return {
