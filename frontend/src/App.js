@@ -4,27 +4,14 @@ import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import Self_exclusion from './pages/Self_exclusion';
+import { AuthContext } from './contexts/AuthContext';
+import MyNavbar from "./components/Navbar"
 
 const HomePage = () => {
   return (
-      <div className="min-vh-100 d-flex flex-column">
-        {/* Navigation */}
-        <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-          <div className="container">
-            <Link to="/" className="navbar-brand fw-bold">BetMaster</Link>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-              <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
-              <div className="navbar-nav">
-                <Link to="/login" className="nav-link">Logowanie</Link>
-                <Link to="/register" className="btn btn-light ms-2">Rejestracja</Link>
-              </div>
-            </div>
-          </div>
-        </nav>
-
+    <>
+        <MyNavbar/>
         {/* Hero Section */}
         <div className="bg-primary text-white py-5">
           <div className="container">
@@ -200,7 +187,7 @@ const HomePage = () => {
             </p>
           </div>
         </footer>
-      </div>
+      </>
   );
 };
 
@@ -211,6 +198,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/self_exclusion" element ={<Self_exclusion/>} />
         </Routes>
       </BrowserRouter>
   );
