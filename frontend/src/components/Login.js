@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -13,6 +13,7 @@ import {
 } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaLock, FaUser, FaArrowLeft } from 'react-icons/fa';
+import { AuthContext } from '../contexts/AuthContext';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -22,6 +23,9 @@ const Login = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
+
+  const { isLogged } = useContext(AuthContext); // Use context
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;

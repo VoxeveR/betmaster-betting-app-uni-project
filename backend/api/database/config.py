@@ -10,5 +10,5 @@ def createURL() -> str:
     port_db = os.getenv('PORT_DB')
     database = os.getenv('DATABASE')
 
-    return f'postgresql://{user_db}:{pass_db}@{ip_db}:{port_db}/{database}'
+    return f'postgresql+psycopg://{user_db}:{pass_db}@{ip_db}:{port_db}/{database}'
 
