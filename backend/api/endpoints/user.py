@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from api.services.user import (
     create_user,
     checkUserExist,
+    get_user_detials,
 )
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
@@ -33,8 +34,25 @@ async def register(user: UserReg, db: Session = Depends(get_db)):
 
 @router.get("/me/{user_id}")
 async def me(user_id: int, db: Session = Depends(get_db)):
-    # Zwracacć wszystko oprócz hasła, peselu i nr_dowodu
-    pass
+    if not user_id:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Param not provided",
+        )
+
+
+
+    user_data = get_user_detials(user_id, db)
+    if user_data is None:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error quering user",
+        )
+
+    return {
+        "status": "ok",
+        "data": user_data
+    }
 
 @router.get("/update/{user_id}")
 async def update(user_id: int, db: Session = Depends(get_db)):
