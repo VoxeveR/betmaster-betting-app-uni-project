@@ -5,8 +5,8 @@ import Login from './components/Login';
 import Register from './components/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Self_exclusion from './pages/Self_exclusion';
-import { AuthContext } from './contexts/AuthContext';
 import MyNavbar from "./components/Navbar"
+import Bets from './pages/Bets';
 
 const HomePage = () => {
   return (
@@ -198,6 +198,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/bets" element ={<Bets/>} />
           <Route path="/self_exclusion" element ={<Self_exclusion/>} />
         </Routes>
       </BrowserRouter>

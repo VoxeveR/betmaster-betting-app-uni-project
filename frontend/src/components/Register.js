@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -83,17 +83,17 @@ const Register = () => {
         throw new Error("Musisz mieć ukończone 18 lat aby się zarejestrować");
       }
 
-      const response = await axios.post('http://localhost:8000/api/register', {
-        name: formData.name,
-        lastname: formData.lastname,
-        email: formData.email,
+      const response = await axios.post('http://localhost:8000/api/users/register', {
+        username: formData.pesel,
         password: formData.password,
-        pesel: formData.pesel,
-        verified: false
+        name: formData.name,
+        surname: formData.lastname,
+        email: formData.email,
       });
+
       if (response.data.status === 'ok') {
         console.log('Zalogowano pomyślnie');
-        navigate('/login');
+        navigate('/Login'); // tutaj chyba App.js
       }
       
     } catch (err) {
