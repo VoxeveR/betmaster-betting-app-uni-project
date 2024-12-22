@@ -1,18 +1,25 @@
-import React, { useContext } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../contexts/AuthContext';
+import {useNavigate} from 'react-router-dom';
+import {Button} from "react-bootstrap";
 
 const MyNavbar = () => {
-  const { isLogged, setIsLogged } = useContext(AuthContext);
 
-  // Toggle the login state
-  const handleSimulateLogin = () => {
-    setIsLogged((prev) => !prev);
+  const navigate = useNavigate();
+
+  const isUserLoggedIn = () => {
+    return sessionStorage.getItem('isLogged') === 'true';
+  }
+  const handleLogout = (e) => {
+    e.preventDefault();
+
+    sessionStorage.setItem('isLogged', 'false');
+    navigate('/');
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
-      <div className="container">
+    <nav className="navbar navbar-dark navbar-expand-lg bg-primary fixed-top h-10">
+      <div className="container-fluid ps-4 pe-4">
         <Link to="/" className="navbar-brand fw-bold">BetMaster</Link>
         <button
           className="navbar-toggler"
@@ -27,10 +34,10 @@ const MyNavbar = () => {
         </button>
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <div className="navbar-nav">
-            {isLogged ? (
+            {isUserLoggedIn() ? (
               <>
                 <Link to="/profile" className="nav-link">Profile</Link>
-                <Link to="/logout" className="btn btn-light ms-2">Logout</Link>
+                <div className="btn btn-light ms-2" onClick={handleLogout}>Logout</div>
               </>
             ) : (
               <>
@@ -38,13 +45,6 @@ const MyNavbar = () => {
                 <Link to="/register" className="btn btn-light ms-2">Rejestracja</Link>
               </>
             )}
-            {/* Simulate login button */}
-            <button
-              className={`btn ms-3 ${isLogged ? 'btn-danger' : 'btn-success'}`}
-              onClick={handleSimulateLogin}
-            >
-              {isLogged ? 'Symuluj Wylogowanie' : 'Symuluj Logowanie'}
-            </button>
           </div>
         </div>
       </div>

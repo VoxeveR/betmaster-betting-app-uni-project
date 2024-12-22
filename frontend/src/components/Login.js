@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState} from 'react';
 import axios from 'axios';
 import {
   Container,
@@ -11,21 +11,19 @@ import {
   FloatingLabel,
   Spinner
 } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { FaLock, FaUser, FaArrowLeft } from 'react-icons/fa';
-import { AuthContext } from '../contexts/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
+import { FaArrowLeft } from 'react-icons/fa';
 
 const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
+
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [validated, setValidated] = useState(false);
-
-  const { isLogged } = useContext(AuthContext); // Use context
-
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -49,15 +47,17 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:8000/api/login', {
+      const response = await axios.post('http://localhost:8000/api/auth/login', {
         email: formData.email,
         password: formData.password
       });
 
       if (response.data.status === 'ok') {
         console.log('Zalogowano pomyślnie');
-        // TODO
+        sessionStorage.setItem('isLogged', 'true');
+        navigate('/Bets');
       }
+
     } catch (err) {
       setError('Wystąpił błąd podczas logowania. Sprawdź dane logowania i spróbuj ponownie.');
       console.error('Błąd logowania:', err);

@@ -1,0 +1,43 @@
+html, body, #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    overflow-y: scroll;
+    scrollbar-gutter: stable;
+}
+
+.container-fluid {
+    overflow-y: hidden;
+}
+
+
+.custom-first-column,
+.custom-second-column {
+    overflow-y: hidden; /* Hide scrollbar by default */
+    scrollbar-gutter: stable; /* Ensure consistent layout even when the scrollbar is hidden */
+    position: relative; /* Optional: Ensure positioning for better control */
+}
+.custom-first-column:hover,
+.custom-second-column:hover {
+    overflow-y: scroll; /* Show scrollbar on hover */
+}
+
+.custom-first-column::-webkit-scrollbar,
+.custom-second-column::-webkit-scrollbar {
+    width: 0.2em;
+    background-color: transparent; /* Optional: Background for scrollbar track */
+}
+
+.custom-first-column::-webkit-scrollbar-thumb,
+.custom-second-column::-webkit-scrollbar-thumb {
+    background-color: #888; /* Scrollbar thumb color */
+    border-radius: 4px; /* Optional: Rounded edges for thumb */
+}
+
+.custom-first-column::-webkit-scrollbar-thumb:hover,
+.custom-second-column::-webkit-scrollbar-thumb:hover {
+    background-color: #555; /* Darker color on thumb hover */
+}
