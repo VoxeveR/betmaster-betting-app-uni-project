@@ -6,7 +6,7 @@ const BetBanner = ({ betData }) => {
         <div className="container-fluid bg-body-secondary">
             <div className="row align-items-center">
                 <div className="col">
-                    <small>{betData.date}</small>
+                    <small className="fs-8">{betData.date}</small>
                     <p className="mb-0">{betData.team1} vs {betData.team2}</p>
                 </div>
                 <div className="col">
