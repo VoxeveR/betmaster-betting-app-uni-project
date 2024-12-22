@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from "../components/Navbar";
 import './Bets.css';
+import BetBanner from "../components/BetBanner";
 
 function Bets(){
     const [categoryList, setCategoryList] = useState([
@@ -18,7 +19,7 @@ function Bets(){
         category:"League of Legends",
         team1:"T1",
         team2:"G2",
-
+        date:"22.12.2024",
     });
 
     const [category, setCategory] = useState('');
@@ -64,6 +65,7 @@ function Bets(){
                     </div>
                     <div className="col-md-8 custom-second-column h-100 bg-white">
                         <p>{content}</p>
+                        <BetBanner betData={betsList} />
                     </div>
                     <div className="col-md bg-primary-subtle">
 
