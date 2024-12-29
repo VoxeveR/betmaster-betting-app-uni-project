@@ -3,26 +3,24 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from "../components/Navbar";
 import './Bets.css';
 import BetBanner from "../components/BetBanner";
+import axios from 'axios';
 
 function Bets(){
-    const [categoryList, setCategoryList] = useState([
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-        "Piłka nożna", "CS:2", "League of Legends", "Koszykówka",
-    ]);
+    const [categoryList, setCategoryList] = useState([]);
 
     const [betsList, setBetsList] = useState({
         category:"League of Legends",
         team1:"T1",
+        team1stake:"1.70",
         team2:"G2",
-        date:"22.12.2024",
+        team2stake:"2.70",
+        drawstake:"4.70",
+        date:"22.12",
+        hour:"17:00"
     });
 
     const [category, setCategory] = useState('');
+    const [selectedBets, setSelectedBets] = useState([]);
 
     const content = category ? (
         <div className="p-3 bg-light border rounded mt-2">
@@ -37,11 +35,25 @@ function Bets(){
 
     useEffect(()=>{
             //handling filling bets -> API CALL
-
-    });
+            try{
+                axios.get('http://localhost:8000/api/games/categories').
+                then((response) => {
+                    setCategoryList(response.data.data);
+                });
+            } catch(error){
+                console.log(error.response.data);
+            }
+    }, []);
 
     function handleCategory(event) {
         setCategory(event.target.textContent);
+    }
+
+    function handleBetSelection(type) {
+        const newSelectedBets = {
+            ...selectedBets,
+        }
+       // setSelectedBets(..prev, event.target.textContent);
     }
 
     return (
@@ -49,10 +61,10 @@ function Bets(){
         <MyNavbar />
             <div className="container-fluid h-100 pt-5 bg-primary-subtle">
                 <div className="row h-100 mt-5">
-                    <div className="col-md h-100 align-items-center bg-primary-subtle custom-first-column">
+                    <div className="col h-100 align-items-center bg-primary-subtle custom-first-column">
                         <h4 className = "mt-2">Sport</h4>
                         <div className="list-group">
-                            {categoryList.map((bet) => (
+                            {Object.keys(categoryList).map((bet) => (
                                 <div
                                     id="bets"
                                     className="list-group-item border1 d-flex align-items-center"
@@ -63,11 +75,11 @@ function Bets(){
                             ))}
                         </div>
                     </div>
-                    <div className="col-md-8 custom-second-column h-100 bg-white">
+                    <div className="col-6 custom-second-column h-100 bg-white">
                         <p>{content}</p>
-                        <BetBanner betData={betsList} />
+                        <BetBanner betData={betsList} onBetSelect={handleBetSelection} />
                     </div>
-                    <div className="col-md bg-primary-subtle">
+                    <div className="col bg-primary-subtle">
 
                     </div>
 
