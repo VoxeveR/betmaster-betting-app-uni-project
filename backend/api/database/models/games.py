@@ -1,5 +1,4 @@
 import enum
-
 from sqlalchemy import Column, Integer, String, Enum, DateTime
 from api.database.init_db import Base
 
