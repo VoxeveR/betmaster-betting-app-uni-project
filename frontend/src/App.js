@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Self_exclusion from './pages/Self_exclusion';
 import MyNavbar from "./components/Navbar"
 import Bets from './pages/Bets';
+import Profile from './pages/Profile';
 
 const HomePage = () => {
   return (
@@ -198,6 +199,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/bets" element ={<Bets/>} />
           <Route path="/self_exclusion" element ={<Self_exclusion/>} />
         </Routes>

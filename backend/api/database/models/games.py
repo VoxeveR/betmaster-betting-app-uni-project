@@ -21,6 +21,7 @@ class Games(Base):
     game_id = Column(Integer, primary_key=True)
     home = Column(String(100) , nullable=False)
     away = Column(String(100) , nullable=False)
+    event_name = Column(String(100), nullable=False)
     start_time = Column(DateTime , nullable=False)
     game_status = Column(Enum(GameStatus), nullable=False)
     sport_type = Column(Enum(SportType) , nullable=False)
