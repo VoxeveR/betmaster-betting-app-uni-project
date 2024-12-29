@@ -41,3 +41,21 @@ body{
 .custom-second-column::-webkit-scrollbar-thumb:hover {
     background-color: #555; /* Darker color on thumb hover */
 }
+
+/* Prevent header from changing on click */
+.accordion-button {
+    background-color: transparent !important;
+    color: inherit !important;
+    box-shadow: none !important;
+    font-weight: normal !important;
+}
+
+/* Optional: Border adjustments to keep uniform look */
+.accordion-item {
+    border: 1px solid #ddd !important;
+}
+
+.accordion-body {
+    padding: 0;
+    padding-left: 1em;
+}

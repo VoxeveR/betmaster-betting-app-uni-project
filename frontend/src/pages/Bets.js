@@ -4,10 +4,11 @@ import MyNavbar from "../components/Navbar";
 import './Bets.css';
 import BetBanner from "../components/BetBanner";
 import axios from 'axios';
+import {Accordion, ListGroup} from "react-bootstrap";
 
 function Bets(){
     const [categoryList, setCategoryList] = useState([]);
-
+    const [eventList, setEventList] = useState(["MAJOR", "LEC", "LA Liga"]);
     const [betsList, setBetsList] = useState({
         category:"League of Legends",
         team1:"T1",
@@ -63,17 +64,25 @@ function Bets(){
                 <div className="row h-100 mt-5">
                     <div className="col h-100 align-items-center bg-primary-subtle custom-first-column">
                         <h4 className = "mt-2">Sport</h4>
-                        <div className="list-group">
-                            {Object.keys(categoryList).map((bet) => (
-                                <div
-                                    id="bets"
-                                    className="list-group-item border1 d-flex align-items-center"
-                                    onClick={handleCategory}>
-                                    {bet}
-                                </div>
-
+                        <Accordion>
+                            {Object.keys(categoryList).map((category, index) => (
+                                <>
+                                    <Accordion.Item
+                                        eventKey={index}
+                                        // border1 d-flex align-items-center
+                                        onClick={handleCategory}>
+                                        <Accordion.Header>{category}</Accordion.Header>
+                                        <Accordion.Body>
+                                            <ListGroup>
+                                                {categoryList[category].map((item, index) => (
+                                                    <ListGroup.Item key={index}>{item}</ListGroup.Item>
+                                                ))}
+                                            </ListGroup>
+                                        </Accordion.Body>
+                                    </Accordion.Item>
+                                </>
                             ))}
-                        </div>
+                        </Accordion>
                     </div>
                     <div className="col-6 custom-second-column h-100 bg-white">
                         <p>{content}</p>
