@@ -5,6 +5,23 @@ from api.services.games import get_games_categories, get_games_by_event_name
 
 router = APIRouter()
 
+
+@router.get("/categories")
+async def get_categories(db: Session = Depends(get_db)):
+    categories = get_games_categories(db)
+
+    if categories is None:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong",
+        )
+
+    return {
+        "status": "ok",
+        "data": categories,
+    }
+
+
 @router.get("/{event_name}")
 async def get_games(event_name: str, db: Session = Depends(get_db)):
     if not isinstance(event_name, str) or not event_name:
@@ -24,19 +41,4 @@ async def get_games(event_name: str, db: Session = Depends(get_db)):
     return {
         "status": "ok",
         "data": games_odds,
-    }
-
-@router.get("/categories")
-async def get_categories(db: Session = Depends(get_db)):
-    categories = get_games_categories(db)
-
-    if categories is None:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Something went wrong",
-        )
-
-    return {
-        "status": "ok",
-        "data": categories,
     }

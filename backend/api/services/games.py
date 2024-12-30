@@ -6,19 +6,20 @@ from api.core.logging import logger
 from collections import defaultdict
 
 
-def get_games_categories(db: Session) -> Optional[dict]:
+def get_games_categories(db: Session) -> Optional[defaultdict]:
     try:
         result = db.query(Games.sport_type, Games.event_name).filter(Games.game_status != GameStatus.FINISHED).all()
 
-        categories = defaultdict(list)
+        categories = defaultdict(set)
 
         for sport_type, event_name in result:
-            categories[sport_type].append(event_name)
+            categories[sport_type].add(event_name)
 
         return categories
     except Exception as e:
         logger.error(e)
         return None
+
 
 def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
     try:
@@ -48,7 +49,7 @@ def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
                 grouped_games[game_key]['oddsX'] = odds
 
         games = {str(i): game_data for i, game_data in enumerate(grouped_games.values())}
-
+        print(games)
         return games
 
     except Exception as e:
