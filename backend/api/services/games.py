@@ -4,6 +4,12 @@ from sqlalchemy.orm import Session
 from api.core.logging import logger
 from collections import defaultdict
 
+def checkGameExist(game_ids: list[int], db: Session) -> bool:
+    for game_id in game_ids:
+        game = db.query(Games).filter(Games.game_id == game_id).first()
+        if not game:
+            return False
+    return True
 
 def get_games_categories(db: Session) -> Optional[dict]:
     try:
