@@ -17,7 +17,7 @@ def add_bet(createBets: CreateBet, db: Session) -> bool:
                 odds=createBets.odds,
                 status=BetStatus.UNSETTLED,
             )
-            print("dodano bet")
+
             db.add(new_bet)
             db.flush()
 
@@ -35,7 +35,7 @@ def add_bet(createBets: CreateBet, db: Session) -> bool:
 
                 db.add(new_bet_game)
                 db.flush()
-            print("dodano betgames")
+
             db.commit()
             return True
     except Exception as e:
