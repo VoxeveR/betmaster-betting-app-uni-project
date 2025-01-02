@@ -23,15 +23,14 @@ def get_games_categories(db: Session) -> Optional[defaultdict]:
 
 def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
     try:
-        result = db.query(Games.home, Games.away, Games.start_time, Odds.odds, Odds.odds_type).join(Odds).filter(Games.event_name == event_name and Games.game_status != GameStatus.FINISHED).all()
+        result = db.query(Games.game_id, Games.home, Games.away, Games.start_time, Odds.odds, Odds.odds_type).join(Odds).filter(Games.event_name == event_name and Games.game_status != GameStatus.FINISHED).all()
 
         grouped_games = {}
 
-        for home, away, start_time, odds, odds_type in result:
-            game_key = (home, away, start_time)
+        for game_id, home, away, start_time, odds, odds_type in result:
 
-            if game_key not in grouped_games:
-                grouped_games[game_key] = {
+            if game_id not in grouped_games:
+                grouped_games[game_id] = {
                     'home': home,
                     'away': away,
                     'start_time': start_time.time(),
@@ -42,15 +41,13 @@ def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
                 }
 
             if odds_type == OddsType.One:
-                grouped_games[game_key]['odds1'] = odds
+                grouped_games[game_id]['odds1'] = odds
             elif odds_type == OddsType.Two:
-                grouped_games[game_key]['odds2'] = odds
+                grouped_games[game_id]['odds2'] = odds
             elif odds_type == OddsType.X:
-                grouped_games[game_key]['oddsX'] = odds
+                grouped_games[game_id]['oddsX'] = odds
 
-        games = {str(i): game_data for i, game_data in enumerate(grouped_games.values())}
-        print(games)
-        return games
+        return grouped_games
 
     except Exception as e:
         logger.error(e)
