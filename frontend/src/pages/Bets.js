@@ -121,7 +121,7 @@ function Bets(){
                             <BetBanner
                                 betData={betData}
                                 key={key}
-                                betIndex={key}
+                                betID={key}
                                 onBetSelect={handleBetSelection}
                             />
                         ))}

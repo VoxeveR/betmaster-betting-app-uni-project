@@ -2,7 +2,7 @@ import React from 'react';
 import { ToggleButton, ToggleButtonGroup, Button } from "react-bootstrap";
 
 // Replace betIndex with betID
-const BetBanner = ({ betData = {}, betIndex, onBetSelect }) => {
+const BetBanner = ({ betData = {}, betID, onBetSelect }) => {
     const {
         start_date = '',
         start_time = '',
@@ -12,12 +12,13 @@ const BetBanner = ({ betData = {}, betIndex, onBetSelect }) => {
         oddsX = '-',
         odds2 = '-'
     } = betData || {};
-    const savedValue = sessionStorage.getItem(`${betIndex}`); // Loading selectionData
-
+    const savedValue = sessionStorage.getItem(`${betID}`); // Loading selectionData
+    console.log(savedValue);
+    console.log(betID);
     //FIXME:
     // example function checking if it works
     const handleDeselect = () => {
-        sessionStorage.removeItem(`${betIndex}`);
+        sessionStorage.removeItem(`${betID}`);
 
         onBetSelect(null);
     };
@@ -31,25 +32,25 @@ const BetBanner = ({ betData = {}, betIndex, onBetSelect }) => {
                         <small> {start_time.slice(0, start_time.length - 3)} </small> <b> {away} </b></p>
                 </div>
                 <div className="col ms-auto text-end">
-                    <ToggleButtonGroup type="radio" name={betIndex} value={savedValue}>
+                    <ToggleButtonGroup type="radio" name={betID} value={savedValue}>
                         <ToggleButton
-                            id={`1:${betIndex}`}
+                            id={`1:${betID}`}
                             value={`1`}
-                            onClick={() => onBetSelect(`${betIndex}:1`)}
+                            onClick={() => onBetSelect(`${betID}:1`)}
                         >
                             1.
                         </ToggleButton>
                         <ToggleButton
-                            id={`X:${betIndex}`}
+                            id={`X:${betID}`}
                             value={`X`}
-                            onClick={() => onBetSelect(`${betIndex}:X`)}
+                            onClick={() => onBetSelect(`${betID}:X`)}
                         >
                             X
                         </ToggleButton>
                         <ToggleButton
-                            id={`2:${betIndex}`}
+                            id={`2:${betID}`}
                             value={`2`}
-                            onClick={() => onBetSelect(`${betIndex}:2`)}
+                            onClick={() => onBetSelect(`${betID}:2`)}
                         >
                             2.
                         </ToggleButton>
