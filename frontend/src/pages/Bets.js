@@ -11,35 +11,18 @@ function Bets(){
     const [selectedCategory, setSelectedCategory] = useState('');
     const [categoryList, setCategoryList] = useState([]);
     const [betsList, setBetsList] = useState({});
-
-
     const [selectedBets, setSelectedBets] = useState([]);
 
-    const content = selectedCategory ? (
-        <div className="p-3 bg-light border rounded mt-2">
-            <h5>Details for {selectedCategory}</h5>
-            <p>
-                Here are some example details for <b>{selectedCategory}</b>.
-            </p>
-        </div>
-    ) : (
-        <p>Please select a category to see details here.</p>
-    );
-
     useEffect(()=>{
-            //handling filling bets -> API CALL
             try{
                 axios.get('http://localhost:8000/api/games/categories')
                     .then((response) => {
-                    //console.log(response.data);
-                    //console.log(response.data.data);
                     setCategoryList(response.data.data);
                 });
             } catch(error){
                 console.log(error.response.data);
             }
     }, []);
-
 
     function handleCategory(event) {
         const selectedCategory = event.target.textContent;
@@ -52,10 +35,24 @@ function Bets(){
                 .then((response) => {
                     setBetsList(response.data.data);
                     console.log(response.data.data);
-                    //console.log(typeof betsList);
                 })
         } catch(error){
             console.log(error.response.data);
+        }
+    }
+
+    function handleUpdateBets() {
+        setSelectedBets(() => []);
+
+        const storedBets = JSON.parse(sessionStorage.getItem('selectedBets'));
+        sessionStorage.removeItem('selectedBets');
+
+        for(let i = 0; i < storedBets.length; i++){
+            let betID = storedBets[i].betID;
+
+            sessionStorage.removeItem(`${betID}`);
+            sessionStorage.removeItem(`${betID}_DATA`);
+            console.log(betID);
         }
     }
 
@@ -78,23 +75,14 @@ function Bets(){
                     //saving whole bet data - user selection - xD
                     sessionStorage.setItem(`${betID}_DATA`, JSON.stringify(betsList[betID]));
 
-                    console.log("test", JSON.parse(sessionStorage.getItem(`${betID}_DATA`))); // Logs the stored selection
+                    console.log("test", JSON.parse(sessionStorage.getItem(`${betID}_DATA`)));
 
                     return newBetsState;
                 } else {
                     return s;
                 }
             });
-        } /*else {
-            //FIXME:
-            // NOT HANDLED PROPERLY
-
-            // Handle deselect scenario: Reset or remove from selectedBets
-            setSelectedBets(s => s.filter(item => item !== selection)); // Removes the deselected bet
-            sessionStorage.removeItem(selection); // Remove the deselected bet from sessionStorage
-            console.log("Deselected: No bet selected.");
-        }*/
-
+        }
         console.log("Current selected bets:", selectedBets);
     }
 
@@ -102,10 +90,10 @@ function Bets(){
         setSelectedBets(prevBets => {
 
             const updatedBets = prevBets.filter(bet => bet !== betID);
-            sessionStorage.setItem('selectedBets', JSON.stringify(updatedBets)); // Update sessionStorage
-            sessionStorage.removeItem(betID); // Remove the specific bet
-            sessionStorage.removeItem(`${betID}_DATA`); // Remove the associated data
-            return updatedBets; // Return the updated state
+            sessionStorage.setItem('selectedBets', JSON.stringify(updatedBets));
+            sessionStorage.removeItem(betID);
+            sessionStorage.removeItem(`${betID}_DATA`);
+            return updatedBets;
 
         });
     }
@@ -122,7 +110,6 @@ function Bets(){
                                 <>
                                     <Accordion.Item
                                         eventKey={index}
-                                        // border1 d-flex align-items-center
                                         >
                                         <Accordion.Header className="border-bottom">{category}</Accordion.Header>
                                         <Accordion.Body className="border-bottom-0">
@@ -140,22 +127,20 @@ function Bets(){
                         </Accordion>
                     </div>
                     <div className="col-6 custom-second-column h-100 p-3 bg-light border rounded mx-auto">
-                        <p>{content}</p>
                         {Object.entries(betsList).map(([key, betData]) => (
                             <BetBanner
                                 betData={betData}
                                 key={key}
                                 betID={key}
+                                selectData={selectedBets}
                                 onBetSelect={handleBetSelection}
                             />
                         ))}
                     </div>
                     <div className="col custom-bg">
-                        <BetBox selectedBets = {selectedBets} handleDeleteBet={handleDeleteBet} />
+                        <BetBox handleDeleteBet={handleDeleteBet} handleUpdateBets={handleUpdateBets} />
                     </div>
-
                 </div>
-
             </div>
             <div className="list-group"></div>
         </>

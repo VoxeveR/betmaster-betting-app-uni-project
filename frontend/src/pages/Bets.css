@@ -4,6 +4,10 @@ html, body, #root {
     padding: 0;
 }
 
+body {
+    min-height: 100%;
+}
+
 .custom-bg {
     background: #E3EFFB;
 }
