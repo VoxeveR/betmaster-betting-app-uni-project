@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from api.services.user import checkUserExist
-from api.services.games import checkGameExist
+from api.services.games import checkGameExistByDict
 from api.services.account import check_balance_for_bet
 from api.services.bets import add_bet
 from api.database.init_db import get_db
@@ -17,7 +17,7 @@ async def create_bet(createBet: CreateBet, db: Session = Depends(get_db)):
             detail="User not found"
         )
 
-    if not checkGameExist(createBet.games, db):
+    if not checkGameExistByDict(createBet.games, db):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Game not found"
