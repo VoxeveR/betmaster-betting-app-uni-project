@@ -45,8 +45,54 @@ function BetBox({selectedBets, handleDeleteBet}) {
         handleDeleteBet(betID);
     }
 
-    function handleMakeBet(){
-        
+    function handleMakeBet(event){
+        event.preventDefault();
+        console.log(event.target.stake.value);
+        const userID = sessionStorage.getItem('userID');
+        const stake = event.target.stake.value;
+        /*
+                const games = betDetails.reduce((acc, bet) => {
+                    acc[`'${bet.betID}'`] = `${bet.userSelection}`;
+                    return acc;
+                }, {});
+                */
+
+        const games = betDetails.reduce((acc, bet) => {
+             acc[bet.betID] = bet.userSelection;
+             return acc;
+        }, {});
+
+        console.log(typeof games);
+        console.log(typeof games[1]);
+
+        let odds = 1;
+        betDetails.forEach(value => {
+            if(value.userSelection === '1'){
+                odds *= value.odds1;
+            } else if (value.userSelection === '2'){
+                odds *= value.odds2;
+            } else {
+                odds *= value.oddsX;
+            }
+        })
+        console.log(games);
+        console.log(odds);
+        console.log(typeof userID);
+
+        const data = {
+            user_id: Number(userID),
+            games: games,
+            amount: Number(stake),
+            odds: Number(odds)
+        }
+
+        console.log(data);
+
+        axios.post("http://localhost:8000/api/bets/", data).then(res => {
+            console.log(res.data);
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     return (
@@ -58,9 +104,9 @@ function BetBox({selectedBets, handleDeleteBet}) {
                 ))}
             </div>
             <div>
-                <Form className="mt-2">
-                    <FormControl placeholder="Stake" />
-                    <button className="btn btn-primary mt-2 w-100" onClick={handleMakeBet}>Confirm Bet</button>
+                <Form className="mt-2" onSubmit={handleMakeBet}>
+                    <FormControl placeholder="Stake" name="stake" />
+                    <button className="btn btn-primary mt-2 w-100">Confirm Bet</button>
                 </Form>
             </div>
         </div>
