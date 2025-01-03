@@ -193,6 +193,8 @@ const HomePage = () => {
 };
 
 function App() {
+  document.title = "BetMaster";
+
   return (
       <BrowserRouter>
         <Routes>
