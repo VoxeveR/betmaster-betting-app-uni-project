@@ -8,6 +8,12 @@ import Self_exclusion from './pages/Self_exclusion';
 import MyNavbar from "./components/Navbar"
 import Bets from './pages/Bets';
 import Profile from './pages/Profile';
+import Admin from './pages/Admin';
+import ManageGames from './components/ManageGames';
+import ManageUsers from './components/ManageUsers';
+import ManageEmployees from './components/ManageEmployees';
+import Stats from './components/Stats';
+
 
 const HomePage = () => {
   return (
@@ -203,7 +209,12 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/bets" element ={<Bets/>} />
-          <Route path="/self_exclusion" element ={<Self_exclusion/>} />
+          <Route path="/admin" element={<Admin />}>
+          <Route path="manage-games" element={<ManageGames />} />
+          <Route path="manage-users" element={<ManageUsers />} />
+          <Route path="manage-employees" element={<ManageEmployees />} />
+          <Route path="stats" element={<Stats />} />
+          </Route>
         </Routes>
       </BrowserRouter>
   );
