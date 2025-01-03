@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from api.services.user import checkUserExist
+from api.services.user import checkUserExistById
 from api.services.games import checkGameExistByDict
 from api.services.account import check_balance_for_bet
 from api.services.bets import add_bet
@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post("/")
 async def create_bet(createBet: CreateBet, db: Session = Depends(get_db)):
-    if checkUserExist(createBet.user_id, db):
+    if checkUserExistById(createBet.user_id, db):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"

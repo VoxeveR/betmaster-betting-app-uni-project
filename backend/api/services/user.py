@@ -16,7 +16,7 @@ def checkUserExistEmail(email: EmailStr, db: Session) -> bool:
     return False
 
 
-def checkUserExist(user_id: int, db: Session) -> bool:
+def checkUserExistById(user_id: int, db: Session) -> bool:
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
         return True
