@@ -15,5 +15,6 @@ class GameUpdate(BaseModel):
     away: Optional[str]
     event_name: Optional[str]
     start_time: Optional[datetime]
+    game_status: Optional[str]
     sport_type: Optional[str]
     game_type: Optional[str]

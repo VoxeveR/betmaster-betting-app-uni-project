@@ -11,7 +11,8 @@ from api.services.games import (
     get_games_by_event_name,
     checkGameExistsByHomeAway,
     checkGameExistById,
-    add_new_game
+    add_new_game,
+    update_game_by_id
 )
 
 router = APIRouter()
@@ -85,22 +86,22 @@ async def new_game(new_game: NewGame, db: Session = Depends(get_db)):
     }
 
 @router.patch("/{game_id}")
-async def update_game(game_id: int, update_game: GameUpdate, db: Session = Depends(get_db)):
-    if not checkGameExistById(game_id, db):
+async def update_game(game_id: int, game_update: GameUpdate, db: Session = Depends(get_db)):
+    if checkGameExistById(game_id, db):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Game not found",
         )
 
-    if  update_game.start_time is not None:
-        if update_game.start_time < datetime.now():
+    if  game_update.start_time is not None:
+        if game_update.start_time < datetime.now():
             raise HTTPException(
                 status_code=status.HTTP_400_BAD_REQUEST,
                 detail="Game already started",
             )
 
 
-    if not update_game(game_id, update_game, db):
+    if not update_game_by_id(game_id, game_update, db):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong",

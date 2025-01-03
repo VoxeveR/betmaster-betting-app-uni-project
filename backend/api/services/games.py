@@ -1,3 +1,5 @@
+import json
+
 from api.database.models.games import Games, GameStatus
 from api.database.models.odds import Odds
 from api.database.models.gameReslut import GameResult
@@ -103,12 +105,13 @@ def add_new_game(newGame: NewGame, db: Session) -> bool:
         return False
 
 
-def update_game(game_id: int ,update_game: GameUpdate, db: Session) -> bool:
+def update_game_by_id(game_id: int, game_update: GameUpdate, db: Session) -> bool:
     try:
         game = db.query(Games).filter(Games.game_id == game_id).first()
 
-        for key, value in update_game.items():
-            setattr(game, key, value)
+        for key, value in game_update.dict(exclude_unset=True).items():
+            if value is not None:
+                setattr(game, key, value)
 
         db.commit()
 
