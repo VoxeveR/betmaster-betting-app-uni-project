@@ -1,5 +1,6 @@
 from api.database.models.games import Games, GameStatus
-from api.database.models.odds import Odds, OddsType
+from api.database.models.odds import Odds
+from api.database.models.gameReslut import GameResult
 from typing_extensions import Optional
 from sqlalchemy.orm import Session
 from api.core.logging import logger
@@ -46,11 +47,11 @@ def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
                     'odds2': None
                 }
 
-            if odds_type == OddsType.One:
+            if odds_type == GameResult.One:
                 grouped_games[game_id]['odds1'] = odds
-            elif odds_type == OddsType.Two:
+            elif odds_type == GameResult.Two:
                 grouped_games[game_id]['odds2'] = odds
-            elif odds_type == OddsType.X:
+            elif odds_type == GameResult.X:
                 grouped_games[game_id]['oddsX'] = odds
 
         return grouped_games
