@@ -3,6 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from "../components/Navbar";
 import './Bets.css';
 import BetBanner from "../components/BetBanner";
+import BetBox from "../components/BetBox";
 import axios from 'axios';
 import {Accordion, ListGroup} from "react-bootstrap";
 
@@ -60,20 +61,31 @@ function Bets(){
 
     function handleBetSelection(selection) {
         if (selection) {
-            setSelectedBets(s => [...s, selection]);
 
-            // adding selectedBets list to browser memory
-            sessionStorage.setItem('selectedBets', JSON.stringify(selectedBets));
+            setSelectedBets((s) => {
+                const selectionData = selection.split(":");
+                const betID = selectionData[0];
 
-            // adding betStatus to browser memory -> maybe should remove
-            const selectionData = selection.split(":");
-            sessionStorage.setItem(`${selectionData[0]}`, selectionData[1]);
-            console.log(betsList);
+                if(!s.includes(betID)){
+                    const newBetsState = [...s, betID];
 
-            //saving whole bet data - user selection - xD
-            sessionStorage.setItem(`${selectionData[0]}_DATA`, JSON.stringify(betsList[selectionData[0]]));
-            console.log(sessionStorage.getItem(`${selectionData[0]}`)); // Logs the stored selection
-        } else {
+                    // adding selectedBets list to browser memory
+                    sessionStorage.setItem('selectedBets', JSON.stringify(newBetsState));
+
+                    // adding betStatus to browser memory -> maybe should remove
+                    sessionStorage.setItem(`${betID}`, selectionData[1]);
+
+                    //saving whole bet data - user selection - xD
+                    sessionStorage.setItem(`${betID}_DATA`, JSON.stringify(betsList[betID]));
+
+                    console.log("test", JSON.parse(sessionStorage.getItem(`${betID}_DATA`))); // Logs the stored selection
+
+                    return newBetsState;
+                } else {
+                    return s;
+                }
+            });
+        } /*else {
             //FIXME:
             // NOT HANDLED PROPERLY
 
@@ -81,30 +93,42 @@ function Bets(){
             setSelectedBets(s => s.filter(item => item !== selection)); // Removes the deselected bet
             sessionStorage.removeItem(selection); // Remove the deselected bet from sessionStorage
             console.log("Deselected: No bet selected.");
-        }
+        }*/
 
         console.log("Current selected bets:", selectedBets);
+    }
+
+    function handleDeleteBet(betID) {
+        setSelectedBets(prevBets => {
+
+            const updatedBets = prevBets.filter(bet => bet !== betID);
+            sessionStorage.setItem('selectedBets', JSON.stringify(updatedBets)); // Update sessionStorage
+            sessionStorage.removeItem(betID); // Remove the specific bet
+            sessionStorage.removeItem(`${betID}_DATA`); // Remove the associated data
+            return updatedBets; // Return the updated state
+
+        });
     }
 
     return (
         <>
         <MyNavbar />
-            <div className="container-fluid h-100 pt-5 bg-primary-subtle">
+            <div className="container-fluid h-100 pt-5 custom-bg">
                 <div className="row h-100 mt-5">
-                    <div className="col h-100 align-items-center bg-primary-subtle custom-first-column">
+                    <div className="col h-100 align-items-center custom-bg custom-first-column">
                         <h4 className = "mt-2">Sport</h4>
-                        <Accordion>
+                        <Accordion alwaysOpen>
                             {Object.keys(categoryList).map((category, index) => (
                                 <>
                                     <Accordion.Item
                                         eventKey={index}
                                         // border1 d-flex align-items-center
                                         >
-                                        <Accordion.Header>{category}</Accordion.Header>
-                                        <Accordion.Body>
-                                            <ListGroup>
+                                        <Accordion.Header className="border-bottom">{category}</Accordion.Header>
+                                        <Accordion.Body className="border-bottom-0">
+                                            <ListGroup className="p-2">
                                                 {categoryList[category].map((item, index) => (
-                                                    <ListGroup.Item key={index}
+                                                    <ListGroup.Item className="border-start-0 border-end-0 border-top-0" key={index}
                                                                     onClick={handleCategory}
                                                                     >{item}</ListGroup.Item>
                                                 ))}
@@ -115,7 +139,7 @@ function Bets(){
                             ))}
                         </Accordion>
                     </div>
-                    <div className="col-6 custom-second-column h-100 bg-white">
+                    <div className="col-6 custom-second-column h-100 p-3 bg-light border rounded mx-auto">
                         <p>{content}</p>
                         {Object.entries(betsList).map(([key, betData]) => (
                             <BetBanner
@@ -126,8 +150,8 @@ function Bets(){
                             />
                         ))}
                     </div>
-                    <div className="col bg-primary-subtle">
-
+                    <div className="col custom-bg">
+                        <BetBox selectedBets = {selectedBets} handleDeleteBet={handleDeleteBet} />
                     </div>
 
                 </div>

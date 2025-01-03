@@ -4,8 +4,14 @@ html, body, #root {
     padding: 0;
 }
 
+.custom-bg {
+    background: #E3EFFB;
+}
+
 body{
-    overflow-y: scroll;
+    min-width: 1280px !important;
+    min-height: 720px !important;
+    overflow: scroll !important;
     scrollbar-gutter: stable;
 }
 
