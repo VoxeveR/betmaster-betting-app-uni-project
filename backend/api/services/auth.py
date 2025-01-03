@@ -34,8 +34,7 @@ def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
                 User.email,
                 User.password,
                 User.username,
-                UserRoles.role_name,
-                Account.balance).join(Account).join(UserRoles).filter(User.email == str(email)).first()
+                UserRoles.role_name).join(UserRoles).filter(User.email == str(email)).first()
 
         if not user:
             return None
@@ -46,7 +45,6 @@ def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
             'user_id': user.user_id,
             'email': user.email,
             'username': user.username,
-            'balance': user.balance,
             'role': user.role_name.value
         }
     except Exception as e:

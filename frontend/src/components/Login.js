@@ -95,7 +95,7 @@ const Login = () => {
                       controlId="email"
                       label="Adres email"
                       required
-                      //pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                      pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                       className="mb-3"
 
                   >
@@ -125,7 +125,7 @@ const Login = () => {
                         value={formData.password}
                         onChange={handleChange}
                         required
-                        minLength={0} // change na 8 potem
+                        minLength={8}
                         disabled={isLoading}
                     />
                     <Form.Control.Feedback type="invalid">
