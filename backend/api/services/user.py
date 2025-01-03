@@ -13,6 +13,11 @@ def checkUserExist(email: EmailStr, db: Session) -> bool:
         return True
     return False
 
+def checkUserExist(user_id: int, db: Session) -> bool:
+    user = db.query(User).filter(User.user_id == user_id).first()
+    if not user:
+        return True
+    return False
 
 def create_user(user: UserReg, db: Session):
     try:
