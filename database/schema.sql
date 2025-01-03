@@ -61,7 +61,7 @@ CREATE table Account(
 );
 
 
-CREATE type transactionType as enum('BET_TRANSACTION', 'WITHDRAWAL', 'PAYMENT');
+CREATE type transactionType as enum('BET_TRANSACTION', 'WITHDRAWAL', 'DEPOSIT');
 CREATE type transactionStatus as enum('PENDING', 'CANCELED', 'CREDITED');
 
 
