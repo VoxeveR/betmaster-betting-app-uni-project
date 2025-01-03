@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Enum, DateTime
 from api.database.init_db import Base
 
 class SportType(enum.Enum):
-    FOOTBALL = 'Football'
+    FOOTBALL = "Football"
     BASKETBALL = 'Basketball'
     LEAGUE_OF_LEGENDS = 'League of Legends'
     CS_GO = 'CS:GO'

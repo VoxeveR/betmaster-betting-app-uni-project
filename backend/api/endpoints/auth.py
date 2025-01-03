@@ -20,6 +20,7 @@ async def login(login: Login, db: Session = Depends(get_db)):
             detail="Incorrect username or password",
         )
 
+
     return {
         "status": "ok",
         "data": resp,
