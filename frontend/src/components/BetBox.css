@@ -1,0 +1,9 @@
+.bet-box {
+    max-height: 80vh;
+}
+
+.bet-box-scroll {
+    max-height: 64vh; /* Adjust scrollable area */
+}
+
+
