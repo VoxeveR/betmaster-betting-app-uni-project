@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from api.services.user import (
     create_user,
-    checkUserExist,
     get_user_detials,
+    checkUserExistEmail,
 )
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
@@ -18,7 +18,7 @@ async def register(user: UserReg, db: Session = Depends(get_db)):
             detail="Some data is not provided",
         )
 
-    if not checkUserExist(user.email, db):
+    if not checkUserExistEmail(user.email, db):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User already exists",

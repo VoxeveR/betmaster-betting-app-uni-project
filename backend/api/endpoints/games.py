@@ -1,7 +1,9 @@
+from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from api.database.init_db import get_db
-from api.services.games import get_games_categories, get_games_by_event_name
+from api.schemas.games import NewGame
+from api.services.games import get_games_categories, get_games_by_event_name, checkGameExistsByHomeAway, add_new_game
 
 router = APIRouter()
 
@@ -41,4 +43,34 @@ async def get_games(event_name: str, db: Session = Depends(get_db)):
     return {
         "status": "ok",
         "data": games_odds,
+    }
+
+@router.post("/")
+async def new_game(new_game: NewGame, db: Session = Depends(get_db)):
+    if not isinstance(new_game, NewGame):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="New game must be provided",
+        )
+
+    if new_game.start_time < datetime.now():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Game already started",
+        )
+
+    if not checkGameExistsByHomeAway(new_game.home, new_game.away, new_game.event_name, db):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Game already exists",
+        )
+
+    if not add_new_game(new_game, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong",
+        )
+
+    return {
+        "status": "success",
     }

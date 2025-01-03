@@ -7,7 +7,7 @@ from api.schemas.user import UserReg
 from api.core.logging import logger
 from api.core.security import hash_password
 
-def checkUserExist(email: EmailStr, db: Session) -> bool:
+def checkUserExistEmail(email: EmailStr, db: Session) -> bool:
     user = db.query(User).filter(User.email == email).first()
     if not user:
         return True
