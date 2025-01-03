@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from api.services.user import checkUserExist
+from api.services.user import checkUserExistById
 from api.services.admin import create_new_admin
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
@@ -15,7 +15,7 @@ async def newAdmin(newadmin: UserReg, db: Session = Depends(get_db)):
             detail="Not enough data provided",
         )
 
-    if not checkUserExist(newadmin.email, db):
+    if not checkUserExistById(newadmin.email, db):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="Admin already exist",
