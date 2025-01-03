@@ -2,8 +2,17 @@ from datetime import datetime
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from api.database.init_db import get_db
-from api.schemas.games import NewGame
-from api.services.games import get_games_categories, get_games_by_event_name, checkGameExistsByHomeAway, add_new_game
+from api.schemas.games import (
+    NewGame,
+    GameUpdate,
+)
+from api.services.games import (
+    get_games_categories,
+    get_games_by_event_name,
+    checkGameExistsByHomeAway,
+    checkGameExistById,
+    add_new_game
+)
 
 router = APIRouter()
 
@@ -66,6 +75,32 @@ async def new_game(new_game: NewGame, db: Session = Depends(get_db)):
         )
 
     if not add_new_game(new_game, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong",
+        )
+
+    return {
+        "status": "success",
+    }
+
+@router.patch("/{game_id}")
+async def update_game(game_id: int, update_game: GameUpdate, db: Session = Depends(get_db)):
+    if not checkGameExistById(game_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Game not found",
+        )
+
+    if  update_game.start_time is not None:
+        if update_game.start_time < datetime.now():
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Game already started",
+            )
+
+
+    if not update_game(game_id, update_game, db):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong",

@@ -6,20 +6,31 @@ from sqlalchemy.orm import Session
 from api.core.logging import logger
 from collections import defaultdict
 
-from api.schemas.games import NewGame
+from api.schemas.games import (
+    NewGame,
+    GameUpdate,
+)
 
 
-def checkGameExist(games: dict, db: Session) -> bool:
+def checkGameExistByDict(games: dict, db: Session) -> bool:
     for game_id in games.keys():
         game = db.query(Games).filter(Games.game_id == int(game_id)).first()
         if not game:
             return False
     return True
 
+
+def checkGameExistById(game_id: int, db: Session) -> bool:
+    game = db.query(Games).filter(Games.game_id == int(game_id)).first()
+
+    return True if not game else False
+
+
 def checkGameExistsByHomeAway(home: str, away: str, event_name: str, db: Session) -> bool:
     game = db.query(Games).filter(Games.home == home and Games.away == away and  Games.event_name == event_name).first()
 
     return True if not game else False
+
 
 def get_games_categories(db: Session) -> Optional[defaultdict]:
     try:
@@ -68,6 +79,7 @@ def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
         logger.error(e)
         return None
 
+
 def add_new_game(newGame: NewGame, db: Session) -> bool:
     try:
 
@@ -81,6 +93,22 @@ def add_new_game(newGame: NewGame, db: Session) -> bool:
         )
 
         db.add(game)
+
+        db.commit()
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
+
+
+def update_game(game_id: int ,update_game: GameUpdate, db: Session) -> bool:
+    try:
+        game = db.query(Games).filter(Games.game_id == game_id).first()
+
+        for key, value in update_game.items():
+            setattr(game, key, value)
 
         db.commit()
 
