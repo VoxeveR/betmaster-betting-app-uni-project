@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from api.api import api_router
 from api.core.logging import logger
+from api.worker.aps_app import start_scheduler
 from datetime import datetime
 
 app = FastAPI()
@@ -39,3 +40,7 @@ async def log_requests(request: Request, call_next):
 @app.get("/healthcheck")
 async def healthcheck():
     return {"status": "ok"}
+
+@app.on_event("startup")
+async def startup():
+    start_scheduler()

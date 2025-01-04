@@ -43,6 +43,12 @@ loggers:
     level: INFO
     handlers: []
     propagate: no
+  apscheduler:
+    level: INFO
+    handlers:
+      - file_handler
+      - default
+    propagate: no
 root:
   level: DEBUG
   handlers:
