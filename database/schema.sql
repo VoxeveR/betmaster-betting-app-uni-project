@@ -3,12 +3,12 @@
 DROP TABLE IF EXISTS BetsGames;
 DROP TABLE IF EXISTS Bets;
 DROP TABLE IF EXISTS Employees;
-DROP TABLE IF EXISTS Odds;
 DROP TABLE IF EXISTS User_roles;
 DROP TABLE IF EXISTS Transactions;
 DROP TABLE IF EXISTS Promotions;
 DROP TABLE IF EXISTS Odds;
 DROP TABLE IF EXISTS Account;
+DROP TABLE IF EXISTS SelfExclusion;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Games;
 DROP TYPE IF EXISTS role;
@@ -46,18 +46,22 @@ create table User_roles(
                            role_name role
 );
 
+create table SelfExclusion(
+                              self_exclusion_id serial NOT NULL PRIMARY KEY,
+                              user_id integer NOT NULL REFERENCES Users,
+                              start_date TIMESTAMP NOT NULL,
+                              end_date TIMESTAMP NOT NULL
+);
 
 CREATE table Account(
-        account_id serial NOT NULL PRIMARY KEY,
-        user_id integer NOT NULL REFERENCES Users,
-        balance decimal(15, 2) NOT NULL DEFAULT 0.00
+                        account_id serial NOT NULL PRIMARY KEY,
+                        user_id integer NOT NULL REFERENCES Users,
+                        balance decimal(15, 2) NOT NULL DEFAULT 0.00
 );
 
 
-
-CREATE type transactionType as enum('BET_TRANSACTION', 'WITHDRAWAL', 'PAYMENT');
+CREATE type transactionType as enum('BET_TRANSACTION', 'WITHDRAWAL', 'DEPOSIT');
 CREATE type transactionStatus as enum('PENDING', 'CANCELED', 'CREDITED');
-
 
 
 create table Transactions(
@@ -74,14 +78,14 @@ create type sportType as enum('FOOTBALL', 'BASKETBALL', 'LEAGUE_OF_LEGENDS', 'CS
 create type gameResult as enum('One', 'X', 'Two');
 
 create table Games(
-    game_id serial NOT NULL PRIMARY KEY,
-    home VARCHAR(100) NOT NULL,
-    away VARCHAR(100) NOT NULL,
-    event_name VARCHAR(100) NOT NULL,
-    start_time TIMESTAMP NOT NULL,
-    game_status gameStatus NOT NULL,
-    sport_type sportType NOT NULL,
-    game_result gameResult
+                      game_id serial NOT NULL PRIMARY KEY,
+                      home VARCHAR(100) NOT NULL,
+                      away VARCHAR(100) NOT NULL,
+                      event_name VARCHAR(100) NOT NULL,
+                      start_time TIMESTAMP NOT NULL,
+                      game_status gameStatus NOT NULL,
+                      sport_type sportType NOT NULL,
+                      game_result gameResult
 );
 
 create type betStatusType as enum('SETTLED', 'UNSETTLED');
@@ -99,16 +103,16 @@ create table Bets(
 
 
 create table BetsGames(
-    bet_id integer NOT NULL REFERENCES Bets,
-    game_id integer NOT NULL REFERENCES Games,
-    expected_result gameResult NOT NULL,
-    PRIMARY KEY (bet_id, game_id)
+                          bet_id integer NOT NULL REFERENCES Bets,
+                          game_id integer NOT NULL REFERENCES Games,
+                          expected_result gameResult NOT NULL,
+                          PRIMARY KEY (bet_id, game_id)
 );
 
 create table Odds(
                      odds_id serial NOT NULL PRIMARY KEY,
                      game_id integer NOT NULL REFERENCES Games,
-                     odds int NOT NULL,
+                     odds decimal NOT NULL,
                      odds_type gameResult NOT NULL
 );
 
