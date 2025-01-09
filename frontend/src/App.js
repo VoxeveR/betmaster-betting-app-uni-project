@@ -1,18 +1,19 @@
 // App.js
 import React from 'react';
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import Login from './components/Login';
-import Register from './components/Register';
+import {BrowserRouter, Routes, Route, Link, Navigate, Outlet} from 'react-router-dom';
+import Login from './pages/Login';
+import Register from './pages/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Self_exclusion from './pages/Self_exclusion';
 import MyNavbar from "./components/Navbar"
 import Bets from './pages/Bets';
 import Profile from './pages/Profile';
 import Admin from './pages/Admin';
-import ManageGames from './components/ManageGames';
-import ManageUsers from './components/ManageUsers';
-import ManageEmployees from './components/ManageEmployees';
+import ManageGames from './pages/ManageGames';
+import ManageUsers from './pages/ManageUsers';
+import ManageEmployees from './pages/ManageEmployees';
 import Stats from './components/Stats';
+import AdminLayout from './components/Admin/AdminLayout';
 
 
 const HomePage = () => {
@@ -198,6 +199,12 @@ const HomePage = () => {
   );
 };
 
+const ProtectedAdminRoute = () => {
+  const isAdmin = sessionStorage.getItem('role') === 'ADMIN';
+  const isAdmin2 = true; //TODO: REMOVE
+  return isAdmin2 ? <Outlet /> : <Navigate to="/" replace />;
+};
+
 function App() {
   document.title = "BetMaster";
 
@@ -209,11 +216,15 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/bets" element ={<Bets/>} />
-          <Route path="/admin" element={<Admin />}>
-          <Route path="manage-games" element={<ManageGames />} />
-          <Route path="manage-users" element={<ManageUsers />} />
-          <Route path="manage-employees" element={<ManageEmployees />} />
-          <Route path="stats" element={<Stats />} />
+
+          <Route path="/admin" element={<ProtectedAdminRoute />}>
+            <Route element={<AdminLayout />}>
+              <Route index element={<Admin />} />
+              <Route path="manage-games" element={<ManageGames />} />
+              <Route path="manage-users" element={<ManageUsers />} />
+              <Route path="manage-employees" element={<ManageEmployees />} />
+              <Route path="stats" element={<Stats />} />
+            </Route>
           </Route>
         </Routes>
       </BrowserRouter>

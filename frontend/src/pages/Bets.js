@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import MyNavbar from "../components/Navbar";
 import './Bets.css';
-import BetBanner from "../components/BetBanner";
-import BetBox from "../components/BetBox";
+import BetBanner from "../components/Bets/BetBanner";
+import BetBox from "../components/Bets/BetBox";
 import axios from 'axios';
 import {Accordion, ListGroup} from "react-bootstrap";
 
@@ -29,7 +29,7 @@ function Bets(){
         setSelectedCategory(selectedCategory);
 
         const gameURL = `http://localhost:8000/api/games/${selectedCategory}`;
-
+        console.log(gameURL);
         try {
             axios.get(gameURL)
                 .then((response) => {
