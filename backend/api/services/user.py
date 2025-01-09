@@ -1,5 +1,6 @@
 from pydantic import EmailStr
 from api.database.models.user import User
+from api.database.models.account import Account
 from typing_extensions import Optional
 from api.database.models.user_roles import UserRoles, Role
 from sqlalchemy.orm import Session
@@ -7,17 +8,20 @@ from api.schemas.user import UserReg
 from api.core.logging import logger
 from api.core.security import hash_password
 
+
 def checkUserExistEmail(email: EmailStr, db: Session) -> bool:
     user = db.query(User).filter(User.email == email).first()
     if not user:
         return True
     return False
 
-def checkUserExist(user_id: int, db: Session) -> bool:
+
+def checkUserExistById(user_id: int, db: Session) -> bool:
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
         return True
     return False
+
 
 def create_user(user: UserReg, db: Session):
     try:
@@ -29,6 +33,7 @@ def create_user(user: UserReg, db: Session):
             surname=user.surname,
             email=str(user.email),
         )
+
         db.add(new_user)
         db.flush()
 
@@ -37,6 +42,14 @@ def create_user(user: UserReg, db: Session):
             role_name=Role.USER,
         )
         db.add(new_role)
+        db.flush()
+
+        new_account = Account(
+            user_id=new_user.user_id,
+            balance=0.00
+        )
+
+        db.add(new_account)
 
         db.commit()
 

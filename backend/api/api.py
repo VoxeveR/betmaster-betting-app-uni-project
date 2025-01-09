@@ -5,6 +5,7 @@ from api.endpoints import (
     admin,
     games,
     bets,
+    account,
 )
 
 api_router = APIRouter()
@@ -37,4 +38,10 @@ api_router.include_router(
     bets.router,
     prefix="/bets",
     tags=["bets"]
+)
+
+api_router.include_router(
+    account.router,
+    prefix="/account",
+    tags=["account"]
 )

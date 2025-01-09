@@ -47,10 +47,10 @@ create table User_roles(
 );
 
 create table SelfExclusion(
-                              self_exclusion_id serial NOT NULL PRIMARY KEY,
-                              user_id integer NOT NULL REFERENCES Users,
-                              start_date TIMESTAMP NOT NULL,
-                              end_date TIMESTAMP NOT NULL
+    self_exclusion_id serial NOT NULL PRIMARY KEY,
+    user_id integer NOT NULL REFERENCES Users,
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL
 );
 
 CREATE table Account(

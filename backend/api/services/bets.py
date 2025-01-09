@@ -4,13 +4,13 @@ from api.database.models.betsgames import BetsGames
 from sqlalchemy.orm import Session
 from api.core.logging import logger
 from api.schemas.bets import CreateBet
-from api.services.account import change_balance
+from api.services.account import change_balance_by_bet
 
 
 
 def add_bet(createBets: CreateBet, db: Session) -> bool:
     try:
-        if change_balance(createBets.user_id, createBets.amount, db):
+        if change_balance_by_bet(createBets.user_id, createBets.amount, db):
             new_bet = Bets(
                 user_id=createBets.user_id,
                 bet_amount=createBets.amount,
