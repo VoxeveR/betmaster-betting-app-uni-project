@@ -2,6 +2,7 @@ from datetime import datetime
 from typing import Optional
 
 from pydantic import BaseModel
+from typing import Optional
 
 class NewGame(BaseModel):
     home: str
@@ -9,6 +10,10 @@ class NewGame(BaseModel):
     event_name: str
     start_time: datetime
     sport_type: str
+    odds1: float
+    odds2: float
+    oddsX: Optional[float]
+
 
 class GameUpdate(BaseModel):
     home: Optional[str]

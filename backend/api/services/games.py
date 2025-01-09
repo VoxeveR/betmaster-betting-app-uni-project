@@ -95,6 +95,31 @@ def add_new_game(newGame: NewGame, db: Session) -> bool:
         )
 
         db.add(game)
+        db.flush()
+
+        oddsOne = Odds(
+            game_id=game.game_id,
+            odds_type=GameResult.One,
+            odds=newGame.odds1,
+        )
+
+        db.add(oddsOne)
+
+        oddsTwo = Odds(
+            game_id=game.game_id,
+            odds_type=GameResult.Two,
+            odds=newGame.odds2,
+        )
+
+        db.add(oddsTwo)
+
+        if newGame.oddsX:
+            oddsX = Odds(
+                game_id=game.game_id,
+                odds_type=GameResult.X,
+                odds=newGame.oddsX,
+            )
+            db.add(oddsX)
 
         db.commit()
 
