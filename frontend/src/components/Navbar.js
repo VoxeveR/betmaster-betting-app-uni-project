@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom';
 
 const MyNavbar = () => {
+  const role = sessionStorage.getItem('role');
 
   const navigate = useNavigate();
 
@@ -31,6 +32,7 @@ const MyNavbar = () => {
               <>
                 <Link to="/my_bets" className="nav-link">Bets</Link>
                 <Link to="/profile" className="nav-link">Profile</Link>
+                {role === 'ADMIN' && <Link as={Link} to="/admin">Panel Administratora</Link>}
                 <div className="btn btn-light ms-2" onClick={handleLogout}>Logout</div>
               </>
             ) : (
