@@ -28,7 +28,7 @@ def task_check_game_started(db: Session):
         db.rollback()
 
 
-def task_genrate_raport(db: Session, filename: str):
+def task_generate_raport(db: Session, filename: str):
     try:
         filename = filename + "_" +  str(datetime.now().date()) + ".pdf"
 
