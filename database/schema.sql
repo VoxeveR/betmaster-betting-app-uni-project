@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS Transactions;
 DROP TABLE IF EXISTS Promotions;
 DROP TABLE IF EXISTS Odds;
 DROP TABLE IF EXISTS Account;
+DROP TABLE IF EXISTS SelfExclusion;
 DROP TABLE IF EXISTS Users;
 DROP TABLE IF EXISTS Games;
 DROP TYPE IF EXISTS role;
@@ -46,6 +47,12 @@ create table User_roles(
                            role_name role
 );
 
+create table SelfExclusion(
+    self_exclusion_id serial NOT NULL PRIMARY KEY,
+    user_id integer NOT NULL REFERENCES Users,
+    start_date TIMESTAMP NOT NULL,
+    end_date TIMESTAMP NOT NULL
+);
 
 CREATE table Account(
         account_id serial NOT NULL PRIMARY KEY,
@@ -54,10 +61,8 @@ CREATE table Account(
 );
 
 
-
-CREATE type transactionType as enum('BET_TRANSACTION', 'WITHDRAWAL', 'PAYMENT');
+CREATE type transactionType as enum('BET_TRANSACTION', 'WITHDRAWAL', 'DEPOSIT');
 CREATE type transactionStatus as enum('PENDING', 'CANCELED', 'CREDITED');
-
 
 
 create table Transactions(

@@ -4,8 +4,8 @@ from api.database.init_db import Base
 
 class TransactionType(enum.Enum):
     BET_TRANSACTION = 'BET_TRANSACTION'
-    WITHDRAW = 'WITHDRAW'
-    PAYMENT = 'PAYMENT'
+    WITHDRAWAL = 'WITHDRAWAL'
+    DEPOSIT = 'DEPOSIT'
 
 class TransactionStatus(enum.Enum):
     PENDING = 'PENDING'

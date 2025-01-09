@@ -61,9 +61,6 @@ const Login = () => {
         }else{
           navigate('/Bets');
         }
-
-        
-        
       }
 
     } catch (err) {
