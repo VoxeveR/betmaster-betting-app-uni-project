@@ -9,7 +9,7 @@ const ManageGames = () => {
   const [formData, setFormData] = useState({});
   const [betsList, setBetsList] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent,   setSelectedEvent] = useState(null);
 
   const gameFields = [
     { name: 'category', label: 'Kategoria', type: 'text', required: true },
@@ -44,7 +44,7 @@ const ManageGames = () => {
       home: formData.team1,
       away: formData.team2,
       event_name: formData.event_name,
-      start_time: formData.start_time,
+      start_time: formData.start_date.concat(' ', formData.start_time).concat('', ":00"),
       sport_type: formData.category/*,
       start_date: formData.start_date,
       odds1: formData.kurs1,
@@ -54,10 +54,11 @@ const ManageGames = () => {
 
     console.log("xd", data);
 
-    axios.post("http://localhost:8000/api/bets/", data).then(res => {
+    axios.post("http://localhost:8000/api/games/", data).then(res => {
       console.log(res.data);
     }).catch(err => {
       console.log(err);
+      console.log(err.detail);
     })
 
     console.log(formData);
