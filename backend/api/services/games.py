@@ -51,11 +51,11 @@ def get_games_categories(db: Session) -> Optional[defaultdict]:
 
 def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
     try:
-        result = db.query(Games.game_id, Games.home, Games.away, Games.start_time, Odds.odds, Odds.odds_type).join(Odds).filter(Games.event_name == event_name and Games.game_status != GameStatus.FINISHED).all()
+        result = db.query(Games.game_id, Games.home, Games.away, Games.start_time, Games.game_status, Odds.odds, Odds.odds_type).join(Odds).filter(Games.event_name == event_name and Games.game_status != GameStatus.FINISHED).all()
 
         grouped_games = {}
 
-        for game_id, home, away, start_time, odds, odds_type in result:
+        for game_id, home, away, start_time, game_status, odds, odds_type in result:
 
             if game_id not in grouped_games:
                 grouped_games[game_id] = {
@@ -63,6 +63,7 @@ def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
                     'away': away,
                     'start_time': start_time.time(),
                     'start_date': start_time.date(),
+                    'game_status': game_status,
                     'odds1': None,
                     'oddsX': None,
                     'odds2': None

@@ -45,11 +45,10 @@ const ManageGames = () => {
       away: formData.team2,
       event_name: formData.event_name,
       start_time: formData.start_date.concat(' ', formData.start_time).concat('', ":00"),
-      sport_type: formData.category/*,
-      start_date: formData.start_date,
+      sport_type: formData.category,
       odds1: formData.kurs1,
       odds2: formData.kurs2,
-      oddsX: formData.kursX*/
+      oddsX: ((formData.kursX) ? formData.kursX: null)
     }
 
     console.log("xd", data);
