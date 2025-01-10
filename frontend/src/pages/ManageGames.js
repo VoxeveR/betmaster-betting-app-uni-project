@@ -9,7 +9,7 @@ const ManageGames = () => {
   const [formData, setFormData] = useState({});
   const [betsList, setBetsList] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedEvent,   setSelectedEvent] = useState(null);
 
   const gameFields = [
     { name: 'category', label: 'Kategoria', type: 'text', required: true },
@@ -53,10 +53,11 @@ const ManageGames = () => {
 
     console.log("xd", data);
 
-    axios.post("http://localhost:8000/api/bets/", data).then(res => {
+    axios.post("http://localhost:8000/api/games/", data).then(res => {
       console.log(res.data);
     }).catch(err => {
       console.log(err);
+      console.log(err.detail);
     })
 
     console.log(formData);
