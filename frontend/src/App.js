@@ -12,7 +12,6 @@ import Admin from './pages/Admin';
 import ManageGames from './pages/ManageGames';
 import ManageUsers from './pages/ManageUsers';
 import ManageEmployees from './pages/ManageEmployees';
-import Stats from './components/Stats';
 import AdminLayout from './components/Admin/AdminLayout';
 
 
@@ -223,7 +222,6 @@ function App() {
               <Route path="manage-games" element={<ManageGames />} />
               <Route path="manage-users" element={<ManageUsers />} />
               <Route path="manage-employees" element={<ManageEmployees />} />
-              <Route path="stats" element={<Stats />} />
             </Route>
           </Route>
         </Routes>
