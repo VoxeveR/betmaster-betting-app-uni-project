@@ -151,11 +151,11 @@ VALUES
 
 INSERT INTO Games (home, away, event_name, start_time, game_status, sport_type)
 VALUES
-    ('Los Angeles Lakers', 'Golden State Warriors', 'NBA', '2024-12-20 19:30:00', 'BEFORE', 'BASKETBALL'),
-    ('G2 Esports', 'Team Vitality', 'LEC Winter Split', '2024-12-21 20:00:00', 'PLAYING', 'LEAGUE_OF_LEGENDS'),
-    ('Astralis', 'Natus Vincere', 'PGL Major Copenhagen', '2024-12-22 18:00:00', 'BEFORE', 'CS_GO'),
-    ('Manchester United', 'Liverpool', 'PREMIER LEAGUE', '2024-12-23 16:30:00', 'FINISHED', 'FOOTBALL'),
-    ('Canelo Alvarez', 'Gennady Golovkin', 'The Trilogy', '2024-12-24 22:00:00', 'BEFORE', 'BOXING'),
+    ('Los Angeles Lakers', 'Golden State Warriors', 'NBA', '2024-12-20 19:30:00', 'BEFORE', 'Basketball'),
+    ('G2 Esports', 'Team Vitality', 'LEC Winter Split', '2024-12-21 20:00:00', 'PLAYING', 'League Of Legends'),
+    ('Astralis', 'Natus Vincere', 'PGL Major Copenhagen', '2024-12-22 18:00:00', 'BEFORE', 'CS 2'),
+    ('Manchester United', 'Liverpool', 'PREMIER LEAGUE', '2024-12-23 16:30:00', 'FINISHED', 'Football'),
+    ('Canelo Alvarez', 'Gennady Golovkin', 'The Trilogy', '2024-12-24 22:00:00', 'BEFORE', 'Boxing'),
     ('Conor McGregor', 'Nate Diaz', 'UFC 196', '2024-12-25 21:00:00', 'BEFORE', 'MMA');
 
 INSERT INTO Odds (game_id, odds, odds_type)
@@ -179,11 +179,11 @@ VALUES
 
 INSERT INTO Games (home, away, event_name, start_time, game_status, sport_type)
 VALUES
-    ('Brooklyn Nets', 'Boston Celtics', 'NBA', '2024-12-27 19:30:00', 'BEFORE', 'BASKETBALL'),
-    ('Miami Heat', 'Chicago Bulls', 'NBA', '2024-12-28 20:00:00', 'BEFORE', 'BASKETBALL'),
-    ('Milwaukee Bucks', 'Dallas Mavericks', 'NBA', '2024-12-29 18:00:00', 'BEFORE', 'BASKETBALL'),
-    ('Phoenix Suns', 'Denver Nuggets', 'NBA', '2024-12-30 21:00:00', 'BEFORE', 'BASKETBALL'),
-    ('Golden State Warriors', 'Los Angeles Clippers', 'NBA', '2024-12-31 23:30:00', 'BEFORE', 'BASKETBALL');
+    ('Brooklyn Nets', 'Boston Celtics', 'NBA', '2024-12-27 19:30:00', 'BEFORE', 'Basketball'),
+    ('Miami Heat', 'Chicago Bulls', 'NBA', '2024-12-28 20:00:00', 'BEFORE', 'Basketball'),
+    ('Milwaukee Bucks', 'Dallas Mavericks', 'NBA', '2024-12-29 18:00:00', 'BEFORE', 'Basketball'),
+    ('Phoenix Suns', 'Denver Nuggets', 'NBA', '2024-12-30 21:00:00', 'BEFORE', 'Basketball'),
+    ('Golden State Warriors', 'Los Angeles Clippers', 'NBA', '2024-12-31 23:30:00', 'BEFORE', 'Basketball');
 
 INSERT INTO Odds (game_id, odds, odds_type)
 VALUES
