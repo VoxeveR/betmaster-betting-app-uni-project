@@ -3,47 +3,48 @@ import {Table, Button, Modal, Form, Alert} from 'react-bootstrap';
   import axios from "axios";
 
 const ManageEmployees = () => {
-  const [employees, setEmployees] = useState([
-    { id: 1, name: 'Adam', surname:'Nowak', position: 'Analityk' },
-    { id: 2, name: 'Ewa', surname:'Kowalska', position: 'Admin' },
-  ]);
+  const [employees, setEmployees] = useState(['']);
   const [showModal, setShowModal] = useState(false);
+  const [validated, setValidated] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     surname: '',
     email: '',
     username: '',
+    phone_number: '',
     password: '',
     password_repeat: '',
     position: 'ANALYST'
   });
-  const [validated, setValidated] = useState(false);
-  const [error, setError] = useState('');
 
+  useEffect(()=>{
+    try{
+      axios.get('http://localhost:8000/api/users/employees')
+          .then((response) => {
+            setEmployees(Object.values(response.data.data));
+            console.log(response.data.data);
+          });
+    } catch(error) {
+      console.log(error.response.data);
+    }
+  }, []);
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
-    console.log("xddd");
-    console.log(formData);
+
     try {
       if (formData.password !== formData.password_repeat) {
         throw new Error("Hasła nie są identyczne");
       }
       setValidated(true);
-      console.log({
-        username: formData.username,
-        password: formData.password,
-        name: formData.name,
-        surname: formData.surname,
-        email: formData.email,
-        role: formData.position,
-      })
 
       const response = await axios.post('http://localhost:8000/api/admin/newadmin', {
         username: formData.username,
         password: formData.password,
         name: formData.name,
         surname: formData.surname,
+        /*phone_number: formData.phone_number,*/ // uncomment after correctly handling
         email: formData.email,
         role: formData.position
       });
@@ -53,26 +54,22 @@ const ManageEmployees = () => {
       }
 
     } catch(err) {
-      setError(err.message || 'Błąd rejestracji. Spróbuj ponownie.');
+      setError(err.message || 'Błąd przy tworzeniu konta. Spróbuj ponownie.');
       e.stopPropagation();
     }
 
-    setEmployees([...employees, { id: employees.length + 1, ...formData }]);
+   setEmployees([...employees, {
+      name: formData.name,
+      surname: formData.surname,
+      username: formData.username,
+      email: formData.email,
+      phone_number: '',
+      pesel: '',
+      position: 'ANALYST',
+    }]);
     setShowModal(false);
+    setError('');
   };
-
-  useEffect(()=>{
-
-    try{
-      axios.get('http://localhost:8000/api/users/employees') // podmienic adres na prawidłowy
-          .then((response) => {
-            setEmployees(response.data.data);
-            console.log(response.data.data);
-          });
-    } catch(error) {
-      console.log(error.response.data);
-    }
-  }, []);
 
   return (
     <div>
@@ -82,23 +79,27 @@ const ManageEmployees = () => {
       <Table striped bordered hover className="mt-3">
         <thead>
           <tr>
-            <th>Nazwa</th>
+            <th>Imię</th>
+            <th>Nazwisko</th>
+            <th>Nazwa użytkownika</th>
+            <th>Numer telefonu</th>
             <th>Stanowisko</th>
             <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
-        {console.log(Object.entries(employees))}
-          {Object.entries(employees).map((id, employee) => (
-            <tr key={id}>
-              <td>{employee.name} {employee.surname}</td>
-              <td>{employee.position}</td>
-              {console.log(employee.name)}
-              <td>
-                <Button variant="warning" size="sm">Edytuj</Button>{' '}
-                <Button variant="danger" size="sm">Usuń</Button>
-              </td>
-            </tr>
+          {employees.map((employee) => (
+              <tr>
+                <td>{employee.name} </td>
+                <td>{employee.surname}</td>
+                <td>{employee.username}</td>
+                <td>{employee.phone_number}</td>
+                <td>{employee.position}</td>
+                <td>
+                  <Button variant="warning" size="sm">Edytuj</Button>{' '}
+                  <Button variant="danger" size="sm">Usuń</Button>
+                </td>
+              </tr>
           ))}
         </tbody>
       </Table>
@@ -160,6 +161,17 @@ const ManageEmployees = () => {
               />
             </Form.Group>
             <Form.Group>
+              <Form.Label>Numer telefonu</Form.Label>
+              <Form.Control
+                  type="tel"
+                  value={formData.phone_number}
+                  required
+                  placeholder="Numer telefonu"
+                  pattern="[0-9]{9}"
+                  onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group>
               <Form.Label>Hasło</Form.Label>
               <Form.Control
                   type="password"
@@ -202,9 +214,6 @@ const ManageEmployees = () => {
             </div>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-
-        </Modal.Footer>
       </Modal>
     </div>
   );

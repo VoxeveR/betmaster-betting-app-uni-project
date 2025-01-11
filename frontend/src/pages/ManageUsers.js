@@ -1,13 +1,23 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import { Table, Button, Modal, Form } from 'react-bootstrap';
+import axios from "axios";
 
 const ManageUsers = () => {
-  const [users, setUsers] = useState([
-    { id: 1, name: 'Jan Kowalski', email: 'jan@example.com', status: 'Aktywny' },
-    { id: 2, name: 'Anna Nowak', email: 'anna@example.com', status: 'Zbanowany' },
-  ]);
+  const [users, setUsers] = useState(['']);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', status: 'Aktywny' });
+
+  useEffect(()=>{
+    try{
+      axios.get('http://localhost:8000/api/users/clients')
+          .then((response) => {
+            setUsers(Object.values(response.data.data));
+            console.log(response.data.data);
+          });
+    } catch(error) {
+      console.log(error.response.data);
+    }
+  }, []);
 
   const handleAddUser = () => {
     setUsers([...users, { id: users.length + 1, ...formData }]);
@@ -25,7 +35,6 @@ const ManageUsers = () => {
   return (
     <div>
       <h2>Zarządzanie użytkownikami</h2>
-      <Button onClick={() => setShowModal(true)}>Dodaj nowego użytkownika</Button>
 
       <Table striped bordered hover className="mt-3">
         <thead>
