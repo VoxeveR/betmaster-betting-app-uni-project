@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from pydantic import EmailStr
 from api.database.models.user import User
 from api.database.models.account import Account
@@ -92,3 +94,63 @@ def get_user_detials(user_id: int, db: Session) -> Optional[dict]:
         logger.error(e)
         return None
 
+def get_clients(db: Session) -> Optional[dict]:
+    try:
+        clients = db.query(User.user_id,
+                           User.email,
+                           User.name,
+                           User.surname,
+                           User.phone_number,
+                           User.id_number,
+                           User.username,
+                           User.pesel).join(UserRoles).filter(UserRoles.role_name == Role.USER).all()
+
+        response = dict()
+
+        for user_id, email, name, surname, phone_number, id_number, username, pesel in clients:
+            response[user_id] = {
+                "email": email,
+                "name": name,
+                "surname": surname,
+                "phone_number": phone_number,
+                "id_number": id_number,
+                "username": username,
+                "pesel": pesel
+            }
+
+        return response
+
+    except Exception as e:
+        logger.error(e)
+        return None
+
+
+def get_employees(db: Session) -> Optional[dict]:
+    try:
+        clients = db.query(User.user_id,
+                           User.email,
+                           User.name,
+                           User.surname,
+                           User.phone_number,
+                           User.id_number,
+                           User.username,
+                           User.pesel).join(UserRoles).filter(UserRoles.role_name == Role.ADMIN or UserRoles.role_name == Role.ANALYST).all()
+
+        response = dict()
+
+        for user_id, email, name, surname, phone_number, id_number, username, pesel in clients:
+            response[user_id] = {
+                "email": email,
+                "name": name,
+                "surname": surname,
+                "phone_number": phone_number,
+                "id_number": id_number,
+                "username": username,
+                "pesel": pesel
+            }
+
+        return response
+
+    except Exception as e:
+        logger.error(e)
+        return None
