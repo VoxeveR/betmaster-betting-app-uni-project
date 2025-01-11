@@ -74,7 +74,6 @@ create table Transactions(
 );
 
 create type gameStatus as enum('BEFORE', 'PLAYING', 'FINISHED');
-create type sportType as enum('FOOTBALL', 'BASKETBALL', 'LEAGUE_OF_LEGENDS', 'CS_GO', 'BOXING', 'MMA');
 create type gameResult as enum('One', 'X', 'Two');
 
 create table Games(
@@ -84,7 +83,7 @@ create table Games(
                       event_name VARCHAR(100) NOT NULL,
                       start_time TIMESTAMP NOT NULL,
                       game_status gameStatus NOT NULL,
-                      sport_type sportType NOT NULL,
+                      sport_type VARCHAR(100) NOT NULL,
                       game_result gameResult
 );
 

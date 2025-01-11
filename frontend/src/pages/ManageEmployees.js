@@ -15,7 +15,7 @@ const ManageEmployees = () => {
     username: '',
     password: '',
     password_repeat: '',
-    position: 'Analityk'
+    position: 'ANALYST'
   });
   const [validated, setValidated] = useState(false);
   const [error, setError] = useState('');
@@ -35,14 +35,17 @@ const ManageEmployees = () => {
         password: formData.password,
         name: formData.name,
         surname: formData.surname,
-        email: formData.email})
+        email: formData.email,
+        role: formData.position,
+      })
 
-      const response = await axios.get('http://localhost:8000/api/admin/newadmin', {
+      const response = await axios.post('http://localhost:8000/api/admin/newadmin', {
         username: formData.username,
         password: formData.password,
         name: formData.name,
         surname: formData.surname,
-        email: formData.email
+        email: formData.email,
+        role: formData.position
       });
 
       if (response.data.status === 'ok') {
@@ -59,17 +62,16 @@ const ManageEmployees = () => {
   };
 
   useEffect(()=>{
-    /*
+
     try{
-      axios.get('http://localhost:8000/api/games/categories') // podmienic adres na prawidłowy
+      axios.get('http://localhost:8000/api/users/employees') // podmienic adres na prawidłowy
           .then((response) => {
-            setAdmins(response.data.data);
+            setEmployees(response.data.data);
             console.log(response.data.data);
           });
-    } catch(error){
+    } catch(error) {
       console.log(error.response.data);
     }
-     */
   }, []);
 
   return (
@@ -86,10 +88,12 @@ const ManageEmployees = () => {
           </tr>
         </thead>
         <tbody>
-          {employees.map((employee) => (
-            <tr key={employee.id}>
+        {console.log(Object.entries(employees))}
+          {Object.entries(employees).map((id, employee) => (
+            <tr key={id}>
               <td>{employee.name} {employee.surname}</td>
               <td>{employee.position}</td>
+              {console.log(employee.name)}
               <td>
                 <Button variant="warning" size="sm">Edytuj</Button>{' '}
                 <Button variant="danger" size="sm">Usuń</Button>
@@ -184,8 +188,8 @@ const ManageEmployees = () => {
                   defaultValue="Select"
                   onChange={(e) => setFormData({...formData, position: e.target.value})}
               >
-                <option value="Analityk">Analityk</option>
-                <option value="Admin">Admin</option>
+                <option value="ANALYST">Analityk</option>
+                <option value="ADMIN">Admin</option>
               </Form.Select>
             </Form.Group>
             <div className="d-flex gap-2 justify-content-end">

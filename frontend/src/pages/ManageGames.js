@@ -88,6 +88,7 @@ const ManageGames = () => {
               {selectedCategory || 'Wybierz kategorię'}
             </Dropdown.Toggle>
             <Dropdown.Menu>
+              {console.log(Object.entries(categoryList))}
               {Object.entries(categoryList).map(([category, events]) => (
                   <>
                   <Dropdown key={category}  drop="end" autoClose="outside">
