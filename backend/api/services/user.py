@@ -39,8 +39,9 @@ def create_user(user: UserReg, db: Session):
 
         new_role = UserRoles(
             user_id=new_user.user_id,
-            role_name=Role.USER,
+            role_name=user.role,
         )
+
         db.add(new_role)
         db.flush()
 
