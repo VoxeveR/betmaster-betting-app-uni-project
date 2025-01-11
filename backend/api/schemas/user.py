@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from api.database.models.user_roles import Role
 
 class UserReg(BaseModel):
     username: str
@@ -6,3 +7,4 @@ class UserReg(BaseModel):
     name: str
     surname: str
     email: EmailStr
+    role: Role
