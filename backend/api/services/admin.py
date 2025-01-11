@@ -19,7 +19,7 @@ def create_new_admin(admin: UserReg, db: Session):
 
         new_role = UserRoles(
             user_id=new_admin.user_id,
-            role_name=Role.ADMIN,
+            role_name=admin.role,
         )
         db.add(new_role)
 

@@ -3,7 +3,6 @@ from api.database.models.gameReslut import GameResult
 from sqlalchemy import Column, Integer, String, Enum, DateTime
 from api.database.init_db import Base
 
-
 class GameStatus(enum.Enum):
     BEFORE = 'Before'
     PLAYING = 'Playing'

@@ -85,7 +85,7 @@ def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
 
 def add_new_game(newGame: NewGame, db: Session) -> bool:
     try:
-
+        print(newGame)
         game = Games(
             home=newGame.home,
             away=newGame.away,
