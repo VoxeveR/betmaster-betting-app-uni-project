@@ -48,6 +48,7 @@ function BetBox({handleDeleteBet, handleUpdateBets}) {
             odds: parseFloat(odds)
         }
 
+        console.log(data);
         axios.post("http://localhost:8000/api/bets/", data).then(res => {
             console.log(res.data);
             handleUpdateBets();
