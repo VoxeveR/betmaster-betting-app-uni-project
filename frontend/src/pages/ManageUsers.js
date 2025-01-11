@@ -38,32 +38,38 @@ const ManageUsers = () => {
 
       <Table striped bordered hover className="mt-3">
         <thead>
-          <tr>
-            <th>Nazwa</th>
-            <th>Email</th>
-            <th>Status</th>
-            <th>Akcje</th>
-          </tr>
+        <tr>
+          <th>Imię</th>
+          <th>Nazwisko</th>
+          <th>Nazwa użytkownika</th>
+          <th>Numer telefonu</th>
+          <th>PESEL</th>
+          <th>Numer dowodu</th>
+          <th>Akcje</th>
+        </tr>
         </thead>
         <tbody>
-          {users.map((user) => (
+        {users.map((user) => (
             <tr key={user.id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
-              <td>{user.status}</td>
+              <td>{user.username}</td>
+              <td>{user.phone_number}</td>
+              <td>{user.pesel}</td>
+              <td>{user.id_number}</td>
               <td>
                 {user.status === 'Aktywny' ? (
-                  <Button variant="danger" size="sm" onClick={() => handleBanUser(user.id)}>
-                    Zbanuj
-                  </Button>
+                    <Button variant="danger" size="sm" onClick={() => handleBanUser(user.id)}>
+                      Zbanuj
+                    </Button>
                 ) : (
-                  <Button variant="success" size="sm" onClick={() => handleUnbanUser(user.id)}>
-                    Odbanuj
-                  </Button>
+                    <Button variant="success" size="sm" onClick={() => handleUnbanUser(user.id)}>
+                      Odbanuj
+                    </Button>
                 )}
               </td>
             </tr>
-          ))}
+        ))}
         </tbody>
       </Table>
 
