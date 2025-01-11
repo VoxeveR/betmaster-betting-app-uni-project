@@ -1,3 +1,5 @@
+from typing import Optional
+
 from api.database.models.bets import Bets, BetStatus
 from api.database.models.gameReslut import GameResult
 from api.database.models.betsgames import BetsGames
@@ -42,3 +44,28 @@ def add_bet(createBets: CreateBet, db: Session) -> bool:
         logger.error(e)
         db.rollback()
         return False
+
+def get_history(user_id: int, db: Session) -> Optional[dict]:
+    try:
+        bets = db.query(Bets.bet_id,
+                        Bets.bet_result,
+                        Bets.bet_amount,
+                        Bets.odds,
+                        Bets.created_at,
+                        Bets.status).filter(Bets.user_id == user_id).all()
+
+        response = dict()
+
+        for bet_id, bet_result, bet_amount, odds, created_at, status in bets:
+            response[bet_id] = {
+                "bet_result": bet_result,
+                "bet_amount": bet_amount,
+                "odds": odds,
+                "created_at": created_at,
+                "status": status,
+            }
+
+        return response
+    except Exception as e:
+        logger.error(e)
+        return None
