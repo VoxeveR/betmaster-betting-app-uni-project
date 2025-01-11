@@ -103,11 +103,12 @@ def get_clients(db: Session) -> Optional[dict]:
                            User.phone_number,
                            User.id_number,
                            User.username,
-                           User.pesel).join(UserRoles).filter(UserRoles.role_name == Role.USER).all()
+                           User.pesel,
+                           UserRoles.role_name).join(UserRoles).filter(UserRoles.role_name == Role.USER).all()
 
         response = dict()
 
-        for user_id, email, name, surname, phone_number, id_number, username, pesel in clients:
+        for user_id, email, name, surname, phone_number, id_number, username, pesel, role_name in clients:
             response[user_id] = {
                 "email": email,
                 "name": name,
@@ -115,7 +116,8 @@ def get_clients(db: Session) -> Optional[dict]:
                 "phone_number": phone_number,
                 "id_number": id_number,
                 "username": username,
-                "pesel": pesel
+                "pesel": pesel,
+                "role_name": role_name
             }
 
         return response
