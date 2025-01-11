@@ -4,6 +4,8 @@ from api.services.user import (
     create_user,
     get_user_detials,
     checkUserExistEmail,
+    get_clients,
+    get_employees,
 )
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
@@ -59,3 +61,33 @@ async def update(user_id: int, db: Session = Depends(get_db)):
     # Zwrócic tylko zmienione dane
     # dodać pola aktywne w zakładach
     pass
+
+@router.get("/clients")
+async def clients(db: Session = Depends(get_db)):
+    clients_dict = get_clients(db)
+
+    if clients_dict is None:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Somthing went wrong on database",
+        )
+
+    return {
+        "status": "ok",
+        "data": clients_dict
+    }
+
+@router.get("/employees")
+async def employees(db: Session = Depends(get_db)):
+    employees_dict = get_employees(db)
+
+    if employees_dict is None:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Somthing went wrong on database",
+        )
+
+    return {
+        "status": "ok",
+        "data": employees_dict
+    }
