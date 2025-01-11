@@ -17,8 +17,10 @@ const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     lastname: '',
+    username: '',
     email: '',
     pesel: '',
+    phone_number: '',
     password: '',
     confirmPassword: ''
   });
@@ -84,10 +86,12 @@ const Register = () => {
       }
 
       const response = await axios.post('http://localhost:8000/api/users/register', {
-        username: formData.pesel,
+        username: formData.username,
         password: formData.password,
         name: formData.name,
         surname: formData.lastname,
+        /*pesel: formData.pesel,
+        phone_number: formData.phone_number,*/ // uncomment when server handles it
         email: formData.email,
         role: "USER",
       });
@@ -127,34 +131,49 @@ const Register = () => {
                 )}
 
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <FloatingLabel controlId="name" label="Name" className="mb-3">
+                <FloatingLabel controlId="name" label="Imię" className="mb-3">
                     <Form.Control
                         type="Name"
-                        placeholder="name"
+                        placeholder="Imię"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
                         required
-                        pattern="[a-zA-Z]{2,40}"
+                        pattern="[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,40}"
                     />
                     <Form.Control.Feedback type="invalid">
-                      Jakub Lipka
+                      Podaj prawidłowe imię!
                     </Form.Control.Feedback>
                   </FloatingLabel>
                 
 
-                  <FloatingLabel controlId="lastname" label="Last Name" className="mb-3">
+                  <FloatingLabel controlId="lastname" label="Nazwisko" className="mb-3">
                     <Form.Control
                         type="lastname"
-                        placeholder="Last name"
+                        placeholder="Nazwisko"
                         name="lastname"
                         value={formData.lastname}
+                        onChange={handleChange}
+                        required
+                        pattern="[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]{2,40}"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Podaj prawidłowe nazwisko!
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+
+                  <FloatingLabel controlId="username" label="Nazwa użytkownika" className="mb-3">
+                    <Form.Control
+                        type="username"
+                        placeholder="Nazwa użytkownika"
+                        name="username"
+                        value={formData.username}
                         onChange={handleChange}
                         required
                         pattern="[a-zA-Z]{2,40}"
                     />
                     <Form.Control.Feedback type="invalid">
-                      Jakub Lipka
+                      Podaj prawidłowe nazwę użytkownika (bez polskich znaków)!
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
