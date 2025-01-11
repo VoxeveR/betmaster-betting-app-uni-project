@@ -89,6 +89,7 @@ const Register = () => {
         name: formData.name,
         surname: formData.lastname,
         email: formData.email,
+        role: "USER",
       });
 
       if (response.data.status === 'ok') {
