@@ -33,11 +33,22 @@ const ManageUsers = () => {
     catch(error) {
       console.log(error.response.data);
     }
-
   };
 
   const handleUnbanUser = (user_id) => {
-    setUsers(users.map(user => user.user_id === user_id ? { ...user, is_banned: false } : user));
+    try {
+      console.log(user_id);
+      axios.patch(`http://localhost:8000/api/users/unban/${user_id}`)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.status === 'success') {
+              setUsers(users.map(user => user.user_id === user_id ? { ...user, is_banned: false } : user));
+            }
+          })
+    }
+    catch(error) {
+      console.log(error.response.data);
+    }
   };
 
   return (
