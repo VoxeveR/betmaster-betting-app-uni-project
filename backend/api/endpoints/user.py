@@ -4,10 +4,12 @@ from api.services.user import (
     create_user,
     get_user_detials,
     checkUserExistEmail,
+    checkUserBanned,
     checkUserExistById,
     get_clients,
     get_employees,
     ban_user,
+    delete_user,
 )
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
@@ -94,12 +96,38 @@ async def employees(db: Session = Depends(get_db)):
         "data": employees_dict
     }
 
+@router.delete("/{user_id}")
+async def delete(user_id: int, db: Session = Depends(get_db)):
+    if checkUserExistById(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User doesn't exist",
+        )
+
+    if not delete_user(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error deleting user",
+        )
+
+    return {
+        "status": "ok",
+    }
+
+
+
 @router.patch("/ban/{user_id}")
 async def ban(user_id: int, db: Session = Depends(get_db)):
     if checkUserExistById(user_id, db):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User does not exist",
+        )
+
+    if checkUserBanned(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User already banned",
         )
 
     if not ban_user(user_id, db):
@@ -109,5 +137,5 @@ async def ban(user_id: int, db: Session = Depends(get_db)):
         )
 
     return {
-        "status": "success",
+        "status": "ok",
     }

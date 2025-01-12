@@ -1,5 +1,3 @@
-from collections import defaultdict
-
 from pydantic import EmailStr
 from api.database.models.user import User
 from api.database.models.account import Account
@@ -24,6 +22,18 @@ def checkUserExistById(user_id: int, db: Session) -> bool:
         return True
     return False
 
+
+def checkUserBanned(user_id: int, db: Session) -> bool:
+    try:
+        user = db.query(User).filter(User.user_id == user_id).first()
+
+        if user.is_banned:
+            return True
+
+        return False
+    except Exception as e:
+        logger.error(e)
+        return False
 
 def create_user(user: UserReg, db: Session):
     try:
@@ -169,6 +179,24 @@ def get_employees(db: Session) -> Optional[dict]:
 def ban_user(user_id: int, db: Session) -> bool:
     try:
         db.query(User).filter(User.user_id == user_id).update({User.is_banned: True})
+        db.commit()
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
+
+
+def delete_user(user_id: int, db: Session) -> bool:
+    try:
+        user_role = db.query(UserRoles).filter(UserRoles.user_id == user_id).first()
+        db.delete(user_role)
+        db.flush()
+
+        user = db.query(User).filter(User.user_id == user_id).first()
+        db.delete(user)
+        db.commit()
 
         return True
     except Exception as e:
