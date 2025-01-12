@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Container, Row, Col, Button, Card, Alert, Form} from 'react-bootstrap';
 import MyNavbar from "../components/Navbar";
@@ -13,6 +13,17 @@ function Profile() {
     const [amount, setAmount] = useState('');
     const [error, setError] = useState('');
     const [userID, setUserID] = useState(sessionStorage.getItem('userID'));
+
+    useEffect(() => {
+        try {
+            axios.get(`http://localhost:8000/api/account/${userID}`)
+                .then(res => {
+                    setUserBalance(() => res.data.data.balance);
+                })
+        } catch (error) {
+            console.log(error);
+        }
+        }, [])
 
     const handleDeposit = () => {
         if (!amount || amount <= 0) {
