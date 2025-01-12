@@ -54,9 +54,11 @@ const Login = () => {
 
       if (response.data.status === 'ok') {
         console.log('Zalogowano pomyślnie');
+        console.log(response.data.data);
         sessionStorage.setItem('isLogged', 'true');
         sessionStorage.setItem('userID', response.data.data.user_id);
         sessionStorage.setItem('role', response.data.data.role);
+        sessionStorage.setItem('balance', response.data.data.balance);
         if(response.data.data.role === 'ADMIN'){
           navigate('/Admin');
         }else{
