@@ -48,7 +48,8 @@ const Login = () => {
 
     try {
       const response = await axios.post('http://localhost:8000/api/auth/login', {
-        email: formData.email,
+        email: (formData.email.includes("@") ? formData.email : null),
+        username: (formData.email.includes("@") ? null : formData.email),
         password: formData.password
       });
 

@@ -32,11 +32,6 @@ function Profile() {
             return;
         }
 
-        if(amount > userBalance){
-            setError('Brak wystarczających środków na koncie!')
-            return;
-        }
-
         try{
             axios.post('http://localhost:8000/api/account/deposit', {
                 user_id: userID,
