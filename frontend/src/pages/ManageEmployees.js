@@ -13,6 +13,7 @@ const ManageEmployees = () => {
     email: '',
     username: '',
     phone_number: '',
+    pesel: '',
     password: '',
     password_repeat: '',
     position: 'ANALYST'
@@ -44,7 +45,7 @@ const ManageEmployees = () => {
         password: formData.password,
         name: formData.name,
         surname: formData.surname,
-        /*phone_number: formData.phone_number,*/ // uncomment after correctly handling
+        phone_number: formData.phone_number,
         email: formData.email,
         role: formData.position
       });
@@ -82,7 +83,9 @@ const ManageEmployees = () => {
             <th>Imię</th>
             <th>Nazwisko</th>
             <th>Nazwa użytkownika</th>
+            <th>Email</th>
             <th>Numer telefonu</th>
+            <th>PESEL</th>
             <th>Stanowisko</th>
             <th>Akcje</th>
           </tr>
@@ -93,7 +96,9 @@ const ManageEmployees = () => {
                 <td>{employee.name} </td>
                 <td>{employee.surname}</td>
                 <td>{employee.username}</td>
+                <td>{employee.email}</td>
                 <td>{employee.phone_number}</td>
+                <td>{employee.pesel}</td>
                 <td>{employee.position}</td>
                 <td>
                   <Button variant="warning" size="sm">Edytuj</Button>{' '}
@@ -116,6 +121,7 @@ const ManageEmployees = () => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleAddEmployee} validated={validated}>
+
             <Form.Group>
               <Form.Label>Imię</Form.Label>
               <Form.Control
@@ -127,6 +133,7 @@ const ManageEmployees = () => {
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
               />
             </Form.Group>
+
             <Form.Group>
               <Form.Label>Nazwisko</Form.Label>
               <Form.Control
@@ -139,6 +146,7 @@ const ManageEmployees = () => {
                   onChange={(e) => setFormData({...formData, surname: e.target.value})}
               />
             </Form.Group>
+
             <Form.Group>
               <Form.Label>E-mail</Form.Label>
               <Form.Control
@@ -150,6 +158,7 @@ const ManageEmployees = () => {
                   onChange={(e) => setFormData({...formData, email: e.target.value})}
               />
             </Form.Group>
+
             <Form.Group>
               <Form.Label>Nazwa użytkownika</Form.Label>
               <Form.Control
@@ -160,17 +169,30 @@ const ManageEmployees = () => {
                   onChange={(e) => setFormData({...formData, username: e.target.value})}
               />
             </Form.Group>
+
             <Form.Group>
-              <Form.Label>Numer telefonu</Form.Label>
+              <Form.Label>Nazwa użytkownika</Form.Label>
               <Form.Control
-                  type="tel"
-                  value={formData.phone_number}
+                  type="text"
+                  placeholder={"Nazwa użytkownika"}
                   required
-                  placeholder="Numer telefonu"
-                  pattern="[0-9]{9}"
-                  onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
+                  value={formData.username}
+                  onChange={(e) => setFormData({...formData, username: e.target.value})}
               />
             </Form.Group>
+
+            <Form.Group>
+              <Form.Label>PESEL</Form.Label>
+              <Form.Control
+                  type="text"
+                  value={formData.pesel}
+                  required
+                  placeholder="Numer telefonu"
+                  pattern="[0-9]{11}"
+                  onChange={(e) => setFormData({...formData, pesel: e.target.value})}
+              />
+            </Form.Group>
+
             <Form.Group>
               <Form.Label>Hasło</Form.Label>
               <Form.Control
@@ -182,6 +204,7 @@ const ManageEmployees = () => {
                   onChange={(e) => setFormData({...formData, password: e.target.value})}
               />
             </Form.Group>
+
             <Form.Group>
               <Form.Label>Powtórz hasło</Form.Label>
               <Form.Control
@@ -193,6 +216,7 @@ const ManageEmployees = () => {
                   onChange={(e) => setFormData({...formData, password_repeat: e.target.value})}
               />
             </Form.Group>
+
             <Form.Group>
               <Form.Label>Stanowisko</Form.Label>
               <Form.Select
@@ -204,6 +228,7 @@ const ManageEmployees = () => {
                 <option value="ADMIN">Admin</option>
               </Form.Select>
             </Form.Group>
+
             <div className="d-flex gap-2 justify-content-end">
               <Button variant="primary" type="submit">
                 Dodaj

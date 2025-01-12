@@ -90,8 +90,8 @@ const Register = () => {
         password: formData.password,
         name: formData.name,
         surname: formData.lastname,
-        /*pesel: formData.pesel,
-        phone_number: formData.phone_number,*/ // uncomment when server handles it
+        pesel: formData.pesel,
+        phone_number: formData.phone_number,
         email: formData.email,
         role: "USER",
       });
