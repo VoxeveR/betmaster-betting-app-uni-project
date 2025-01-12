@@ -5,6 +5,7 @@ import MyNavbar from "../components/Navbar";
 import { FaUser, FaHistory, FaFileAlt, FaChartBar, FaUserShield, FaInfoCircle} from 'react-icons/fa';
 import './Profile.css';
 import axios from 'axios';
+import {Link} from "react-router-dom";
 
 function Profile() {
     const [userBalance, setUserBalance] = useState(0);
@@ -173,7 +174,7 @@ function Profile() {
                         <div className="list-group">
                             <div className="list-group-item">
                                 <FaUser className="me-2" />
-                                Moje dane
+                                <Link to="/user_data"> Moje dane </Link>
                             </div>
                             <div className="list-group-item">
                                 <FaHistory className="me-2" />
