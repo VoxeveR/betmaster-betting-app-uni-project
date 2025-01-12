@@ -55,7 +55,7 @@ def check_if_user_banned_by_username(username: str, db: Session) -> bool:
 
 def check_if_user_banned_by_email(email: EmailStr, db: Session) -> bool:
     try:
-        is_banned = db.query(User.is_banned).filter(User.username == str(email)).first()
+        is_banned = db.query(User.is_banned).filter(User.email == str(email)).first()
 
         if is_banned:
             return True
@@ -72,7 +72,6 @@ def auth_user_by_email(email: EmailStr, password: str, db: Session) -> Optional[
                 User.email,
                 User.password,
                 User.username,
-                Account.balance,
                 UserRoles.role_name).join(UserRoles, UserRoles.user_id == User.user_id).filter(User.email == str(email)).first()
 
         if not user:
@@ -97,8 +96,7 @@ def auth_user_by_username(username: str, password: str, db: Session) -> Optional
                 User.email,
                 User.password,
                 User.username,
-                UserRoles.role_name,
-                Account.balance).join(Account).join(UserRoles).filter(User.username == username).first()
+                UserRoles.role_name).join(UserRoles).filter(User.username == username).first()
 
         if not user:
             return None
@@ -109,7 +107,6 @@ def auth_user_by_username(username: str, password: str, db: Session) -> Optional
             'user_id': user.user_id,
             'email': user.email,
             'username': user.username,
-            'balance': user.balance,
             'role': user.role_name.value
         }
     except Exception as e:
