@@ -5,7 +5,7 @@ import axios from "axios";
 const ManageUsers = () => {
   const [users, setUsers] = useState(['']);
   const [showModal, setShowModal] = useState(false);
-  const [formData, setFormData] = useState({ name: '', email: '', status: 'Aktywny' });
+  const [formData, setFormData] = useState({ name: '', email: '', is_banned: false });
 
   useEffect(()=>{
     try{
@@ -19,17 +19,25 @@ const ManageUsers = () => {
     }
   }, []);
 
-  const handleAddUser = () => {
-    setUsers([...users, { id: users.length + 1, ...formData }]);
-    setShowModal(false);
+  const handleBanUser = (user_id) => {
+    try {
+      console.log(user_id);
+      axios.patch(`http://localhost:8000/api/users/ban/${user_id}`)
+      .then((response) => {
+        console.log(response.data);
+        if (response.data.status === 'success') {
+          setUsers(users.map(user => user.user_id === user_id ? { ...user, is_banned: true } : user));
+        }
+      })
+    }
+    catch(error) {
+      console.log(error.response.data);
+    }
+
   };
 
-  const handleBanUser = (id) => {
-    setUsers(users.map(user => user.id === id ? { ...user, status: 'Zbanowany' } : user));
-  };
-
-  const handleUnbanUser = (id) => {
-    setUsers(users.map(user => user.id === id ? { ...user, status: 'Aktywny' } : user));
+  const handleUnbanUser = (user_id) => {
+    setUsers(users.map(user => user.user_id === user_id ? { ...user, is_banned: false } : user));
   };
 
   return (
@@ -50,7 +58,7 @@ const ManageUsers = () => {
         </thead>
         <tbody>
         {users.map((user) => (
-            <tr key={user.id}>
+            <tr key={user.user_id}>
               <td>{user.name}</td>
               <td>{user.email}</td>
               <td>{user.username}</td>
@@ -58,12 +66,12 @@ const ManageUsers = () => {
               <td>{user.pesel}</td>
               <td>{user.id_number}</td>
               <td>
-                {user.status === 'Aktywny' ? (
-                    <Button variant="danger" size="sm" onClick={() => handleBanUser(user.id)}>
+                {user.is_banned === false ? (
+                    <Button variant="danger" size="sm" onClick={() => handleBanUser(user.user_id)}>
                       Zbanuj
                     </Button>
                 ) : (
-                    <Button variant="success" size="sm" onClick={() => handleUnbanUser(user.id)}>
+                    <Button variant="success" size="sm" onClick={() => handleUnbanUser(user.user_id)}>
                       Odbanuj
                     </Button>
                 )}
@@ -98,8 +106,8 @@ const ManageUsers = () => {
             <Form.Group>
               <Form.Label>Status</Form.Label>
               <Form.Select
-                value={formData.status}
-                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                value={formData.is_banned}
+                onChange={(e) => setFormData({ ...formData, is_banned: e.target.value })}
               >
                 <option value="Aktywny">Aktywny</option>
                 <option value="Zbanowany">Zbanowany</option>
@@ -110,9 +118,6 @@ const ManageUsers = () => {
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowModal(false)}>
             Anuluj
-          </Button>
-          <Button variant="primary" onClick={handleAddUser}>
-            Dodaj
           </Button>
         </Modal.Footer>
       </Modal>
