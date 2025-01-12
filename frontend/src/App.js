@@ -13,6 +13,7 @@ import ManageGames from './pages/ManageGames';
 import ManageUsers from './pages/ManageUsers';
 import ManageEmployees from './pages/ManageEmployees';
 import AdminLayout from './components/Admin/AdminLayout';
+import BetsHistory from "./pages/BetsHistory";
 
 
 const HomePage = () => {
@@ -215,7 +216,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/bets" element ={<Bets/>} />
-
+          <Route path="/my_bets" element={<BetsHistory/>} />
           <Route path="/admin" element={<ProtectedAdminRoute />}>
             <Route element={<AdminLayout />}>
               <Route index element={<Admin />} />
