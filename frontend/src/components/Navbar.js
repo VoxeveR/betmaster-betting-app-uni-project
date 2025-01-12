@@ -13,8 +13,7 @@ const MyNavbar = () => {
 
   const handleLogout = (e) => {
     e.preventDefault();
-
-    sessionStorage.setItem('isLogged', 'false');
+    sessionStorage.clear();
     navigate('/');
   };
 
@@ -24,14 +23,13 @@ const MyNavbar = () => {
         <Link to="/" className="navbar-brand fw-bold">BetMaster</Link>
         <div className="navbar-nav">
           <Link to="/Bets" className="nav-link">Offer</Link>
-          <Link to="/promotions" className="nav-link">Promo</Link>
         </div>
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <div className="navbar-nav">
             {isUserLoggedIn() ? (
               <>
-                <Link to="/my_bets" className="nav-link">Bets</Link>
-                <Link to="/profile" className="nav-link">Profile</Link>
+                <Link to="/my_bets" className="nav-link mt-1">Bets</Link>
+                <Link to="/profile" className="nav-link mt-1">Profile</Link>
                 {role === 'ADMIN' && <Link as={Link} to="/admin">Panel Administratora</Link>}
                 <div className="btn btn-light ms-2" onClick={handleLogout}>Logout</div>
               </>
