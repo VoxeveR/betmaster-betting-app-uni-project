@@ -34,6 +34,8 @@ def create_user(user: UserReg, db: Session):
             name=user.name,
             surname=user.surname,
             email=str(user.email),
+            pesel=user.pesel,
+            phone_number=user.phone_number,
         )
 
         db.add(new_user)

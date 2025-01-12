@@ -14,10 +14,10 @@ router = APIRouter()
 
 @router.post("/register")
 async def register(user: UserReg, db: Session = Depends(get_db)):
-    if not user.email or not user.password or not user.name or not user.surname:
+    if not user.email or not user.password or not user.name or not user.surname or not user.pesel or not user.phone_number:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Some data is    not provided",
+            detail="Some data is not provided",
         )
 
     if not checkUserExistEmail(user.email, db):
