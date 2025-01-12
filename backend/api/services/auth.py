@@ -10,7 +10,7 @@ from api.core.logging import logger
 from sqlalchemy.orm import Session
 
 
-def check_self_exclusion(email: EmailStr, db: Session) -> bool:
+def check_self_exclusion_by_email(email: EmailStr, db: Session) -> bool:
     try:
         user = db.query(User).filter(User.email == str(email)).first()
 
@@ -25,9 +25,22 @@ def check_self_exclusion(email: EmailStr, db: Session) -> bool:
         logger.error(e)
         return True
 
+def check_self_exclusion_by_username(username: str, db: Session) -> bool:
+    try:
+        user = db.query(User).filter(User.username == username).first()
 
+        if user:
+            self_exclusion = db.query(SelfExclusion).filter(SelfExclusion.user_id == user.user_id).first()
+            if self_exclusion:
+                if self_exclusion.start_date < datetime.now() < self_exclusion.end_date:
+                    return True
 
-def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
+        return False
+    except Exception as e:
+        logger.error(e)
+        return True
+
+def auth_user_by_email(email: EmailStr, password: str, db: Session) -> Optional[dict]:
     try:
         user = db.query(
                 User.user_id,
@@ -47,6 +60,32 @@ def auth_user(email: EmailStr, password: str, db: Session) -> Optional[dict]:
             'email': user.email,
             'username': user.username,
             'role': user.role_name.value,
+        }
+    except Exception as e:
+        logger.error(e)
+        return None
+
+def auth_user_by_username(username: str, password: str, db: Session) -> Optional[dict]:
+    try:
+        user = db.query(
+                User.user_id,
+                User.email,
+                User.password,
+                User.username,
+                UserRoles.role_name,
+                Account.balance).join(Account).join(UserRoles).filter(User.username == username).first()
+
+        if not user:
+            return None
+        if not verify_password(password, user.password.encode('utf-8')):
+            return None
+
+        return {
+            'user_id': user.user_id,
+            'email': user.email,
+            'username': user.username,
+            'balance': user.balance,
+            'role': user.role_name.value
         }
     except Exception as e:
         logger.error(e)
