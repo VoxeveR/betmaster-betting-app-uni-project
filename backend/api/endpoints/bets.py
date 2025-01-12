@@ -48,7 +48,7 @@ async def create_bet(createBet: CreateBet, db: Session = Depends(get_db)):
         )
 
     return {
-        "status": "success",
+        "status": "ok",
     }
 
 @router.get("/{user_id}")

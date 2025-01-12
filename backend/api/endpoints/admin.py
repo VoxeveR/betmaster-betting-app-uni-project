@@ -28,5 +28,5 @@ async def newAdmin(newadmin: UserReg, db: Session = Depends(get_db)):
         )
 
     return {
-        "status": "success",
+        "status": "ok",
     }

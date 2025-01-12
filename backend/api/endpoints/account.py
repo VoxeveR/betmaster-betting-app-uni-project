@@ -55,7 +55,7 @@ async def deposit(change_balance: ChangeBalance, db: Session = Depends(get_db)):
         )
 
     return {
-        "status": "success",
+        "status": "ok",
     }
 
 
@@ -80,5 +80,5 @@ async def withdrawal(change_balance: ChangeBalance, db: Session = Depends(get_db
         )
 
     return {
-        "status": "success",
+        "status": "ok",
     }

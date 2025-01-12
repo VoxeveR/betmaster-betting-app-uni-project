@@ -1,5 +1,4 @@
-import json
-
+from api.database.models.betsgames import BetsGames
 from api.database.models.games import Games, GameStatus
 from api.database.models.odds import Odds
 from api.database.models.gameReslut import GameResult
@@ -33,6 +32,10 @@ def checkGameExistsByHomeAway(home: str, away: str, event_name: str, db: Session
 
     return True if not game else False
 
+def checkGameHaveBets(game_id: int, db: Session) -> bool:
+    games = db.query(BetsGames).filter(BetsGames.game_id == game_id).all()
+
+    return True if games else False
 
 def get_games_categories(db: Session) -> Optional[defaultdict]:
     try:
@@ -139,6 +142,20 @@ def update_game_by_id(game_id: int, game_update: GameUpdate, db: Session) -> boo
             if value is not None:
                 setattr(game, key, value)
 
+        db.commit()
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
+
+def delete_game(game_id: int, db: Session) -> bool:
+    try:
+        db.query(Odds).filter(Odds.game_id == game_id).delete()
+        db.flush()
+
+        db.query(Games).filter(Games.game_id == game_id).delete()
         db.commit()
 
         return True
