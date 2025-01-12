@@ -56,7 +56,7 @@ async def me(user_id: int, db: Session = Depends(get_db)):
         "data": user_data
     }
 
-@router.get("/update/{user_id}")
+@router.patch("/update/{user_id}")
 async def update(user_id: int, db: Session = Depends(get_db)):
     # Zwrócic tylko zmienione dane
     # dodać pola aktywne w zakładach

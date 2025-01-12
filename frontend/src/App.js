@@ -14,7 +14,7 @@ import ManageUsers from './pages/ManageUsers';
 import ManageEmployees from './pages/ManageEmployees';
 import AdminLayout from './components/Admin/AdminLayout';
 import BetsHistory from "./pages/BetsHistory";
-
+import UserData from './pages/UserData';
 
 const HomePage = () => {
   return (
@@ -217,6 +217,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/bets" element ={<Bets/>} />
           <Route path="/my_bets" element={<BetsHistory/>} />
+          <Route path="/user_data" element={<UserData/>} />
           <Route path="/admin" element={<ProtectedAdminRoute />}>
             <Route element={<AdminLayout />}>
               <Route index element={<Admin />} />
