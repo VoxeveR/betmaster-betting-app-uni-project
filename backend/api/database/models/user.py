@@ -14,4 +14,5 @@ class User(Base):
     id_number = Column(String(10), nullable=True)
     phone_number = Column(Numeric(11), nullable=True)
     is_verified = Column(Boolean, nullable=True)
+    is_banned = Column(Boolean, nullable=False, server_default=func.false())
     created_at = Column(DateTime, server_default=func.now())

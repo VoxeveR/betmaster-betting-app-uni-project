@@ -160,3 +160,13 @@ def get_employees(db: Session) -> Optional[dict]:
     except Exception as e:
         logger.error(e)
         return None
+
+def ban_user(user_id: int, db: Session) -> bool:
+    try:
+        db.query(User).filter(User.user_id == user_id).update({User.is_banned: True})
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
