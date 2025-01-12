@@ -4,8 +4,10 @@ from api.services.user import (
     create_user,
     get_user_detials,
     checkUserExistEmail,
+    checkUserExistById,
     get_clients,
     get_employees,
+    ban_user,
 )
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
@@ -56,7 +58,7 @@ async def me(user_id: int, db: Session = Depends(get_db)):
         "data": user_data
     }
 
-@router.get("/update/{user_id}")
+@router.patch("/update/{user_id}")
 async def update(user_id: int, db: Session = Depends(get_db)):
     # Zwrócic tylko zmienione dane
     # dodać pola aktywne w zakładach
@@ -90,4 +92,22 @@ async def employees(db: Session = Depends(get_db)):
     return {
         "status": "ok",
         "data": employees_dict
+    }
+
+@router.patch("/ban/{user_id}")
+async def ban(user_id: int, db: Session = Depends(get_db)):
+    if not checkUserExistById(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User does not exist",
+        )
+
+    if not ban_user(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error banning user",
+        )
+
+    return {
+        "status": "success",
     }
