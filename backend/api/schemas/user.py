@@ -7,4 +7,6 @@ class UserReg(BaseModel):
     name: str
     surname: str
     email: EmailStr
+    pesel: int
+    phone_number: int
     role: Role
