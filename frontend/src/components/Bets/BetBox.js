@@ -54,6 +54,8 @@ function BetBox({handleDeleteBet, handleUpdateBets}) {
             handleUpdateBets();
         }).catch(err => {
             console.log(err);
+            const errorMessage = err.response.data.detail || "An unexpected error occurred. Please try again.";
+            alert(`Error: ${errorMessage}`);
         })
     }
 
