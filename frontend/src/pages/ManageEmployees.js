@@ -64,8 +64,8 @@ const ManageEmployees = () => {
       surname: formData.surname,
       username: formData.username,
       email: formData.email,
-      phone_number: '',
-      pesel: '',
+      phone_number: formData.phone_number,
+      pesel: formData.pesel,
       position: 'ANALYST',
     }]);
     setShowModal(false);
@@ -99,7 +99,7 @@ const ManageEmployees = () => {
                 <td>{employee.email}</td>
                 <td>{employee.phone_number}</td>
                 <td>{employee.pesel}</td>
-                <td>{employee.position}</td>
+                <td>{employee.role}</td>
                 <td>
                   <Button variant="warning" size="sm">Edytuj</Button>{' '}
                   <Button variant="danger" size="sm">Usuń</Button>
@@ -171,13 +171,13 @@ const ManageEmployees = () => {
             </Form.Group>
 
             <Form.Group>
-              <Form.Label>Nazwa użytkownika</Form.Label>
+              <Form.Label>Numer telefonu</Form.Label>
               <Form.Control
                   type="text"
-                  placeholder={"Nazwa użytkownika"}
+                  placeholder={"Numer telefonu"}
                   required
-                  value={formData.username}
-                  onChange={(e) => setFormData({...formData, username: e.target.value})}
+                  value={formData.phone_number}
+                  onChange={(e) => setFormData({...formData, phone_number: e.target.value})}
               />
             </Form.Group>
 

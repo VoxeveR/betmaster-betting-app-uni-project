@@ -85,6 +85,19 @@ const Register = () => {
         throw new Error("Musisz mieć ukończone 18 lat aby się zarejestrować");
       }
 
+      console.log(
+          {
+            username: formData.username,
+            password: formData.password,
+            name: formData.name,
+            surname: formData.lastname,
+            pesel: parseInt(formData.pesel),
+            phone_number: parseInt(formData.phone_number),
+            email: formData.email,
+            role: "USER",
+          }
+    )
+
       const response = await axios.post('http://localhost:8000/api/users/register', {
         username: formData.username,
         password: formData.password,
@@ -189,6 +202,21 @@ const Register = () => {
                     />
                     <Form.Control.Feedback type="invalid">
                       Proszę podać prawidłowy adres email
+                    </Form.Control.Feedback>
+                  </FloatingLabel>
+
+                  <FloatingLabel controlId="phone_number" label="Numer telefonu" className="mb-3">
+                    <Form.Control
+                        type="tel"
+                        placeholder="imienazwisko@spoko.pl"
+                        name="phone_number"
+                        value={formData.phone_number}
+                        onChange={handleChange}
+                        required
+                        pattern="[0-9]{9]"
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      Proszę podać prawidłowy numer telefonu
                     </Form.Control.Feedback>
                   </FloatingLabel>
 
