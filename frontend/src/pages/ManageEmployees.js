@@ -16,7 +16,7 @@ const ManageEmployees = () => {
     pesel: '',
     password: '',
     password_repeat: '',
-    position: 'ANALYST'
+    role: 'ANALYST'
   });
 
   useEffect(()=>{
@@ -40,14 +40,26 @@ const ManageEmployees = () => {
       }
       setValidated(true);
 
+      console.log({
+        username: formData.username,
+        password: formData.password,
+        name: formData.name,
+        surname: formData.surname,
+        pesel: parseInt(formData.pesel),
+        phone_number: parseInt(formData.phone_number),
+        email: formData.email,
+        role: formData.role
+      });
+
       const response = await axios.post('http://localhost:8000/api/admin/newadmin', {
         username: formData.username,
         password: formData.password,
         name: formData.name,
         surname: formData.surname,
-        phone_number: formData.phone_number,
+        pesel: parseInt(formData.pesel),
+        phone_number: parseInt(formData.phone_number),
         email: formData.email,
-        role: formData.position
+        role: formData.role
       });
 
       if (response.data.status === 'ok') {
@@ -66,7 +78,7 @@ const ManageEmployees = () => {
       email: formData.email,
       phone_number: formData.phone_number,
       pesel: formData.pesel,
-      position: 'ANALYST',
+      role: formData.role,
     }]);
     setShowModal(false);
     setError('');
@@ -220,9 +232,9 @@ const ManageEmployees = () => {
             <Form.Group>
               <Form.Label>Stanowisko</Form.Label>
               <Form.Select
-                  value={formData.position}
+                  value={formData.role}
                   defaultValue="Select"
-                  onChange={(e) => setFormData({...formData, position: e.target.value})}
+                  onChange={(e) => setFormData({...formData, role: e.target.value})}
               >
                 <option value="ANALYST">Analityk</option>
                 <option value="ADMIN">Admin</option>
