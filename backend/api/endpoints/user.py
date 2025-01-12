@@ -96,7 +96,7 @@ async def employees(db: Session = Depends(get_db)):
 
 @router.patch("/ban/{user_id}")
 async def ban(user_id: int, db: Session = Depends(get_db)):
-    if not checkUserExistById(user_id, db):
+    if checkUserExistById(user_id, db):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="User does not exist",
