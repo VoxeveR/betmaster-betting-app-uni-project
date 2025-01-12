@@ -11,8 +11,10 @@ from api.services.games import (
     get_games_by_event_name,
     checkGameExistsByHomeAway,
     checkGameExistById,
+    checkGameHaveBets,
     add_new_game,
-    update_game_by_id
+    update_game_by_id,
+    delete_game,
 )
 
 router = APIRouter()
@@ -82,7 +84,7 @@ async def new_game(new_game: NewGame, db: Session = Depends(get_db)):
         )
 
     return {
-        "status": "success",
+        "status": "ok",
     }
 
 @router.patch("/{game_id}")
@@ -108,5 +110,29 @@ async def update_game(game_id: int, game_update: GameUpdate, db: Session = Depen
         )
 
     return {
-        "status": "success",
+        "status": "ok",
+    }
+
+@router.delete("/{game_id}")
+async def delete(game_id: int, db: Session = Depends(get_db)):
+    if checkGameExistById(game_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Game not found",
+        )
+    
+    if checkGameHaveBets(game_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Game already have bets",
+        )
+    
+    if not delete_game(game_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong",
+        )
+    
+    return {
+        "status": "ok",
     }
