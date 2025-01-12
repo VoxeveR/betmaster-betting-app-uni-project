@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.post("/newadmin")
 async def newAdmin(newadmin: UserReg, db: Session = Depends(get_db)):
-    if not newadmin.email or not newadmin.name or not newadmin.password or not newadmin.surname or not newadmin.username:
+    if not newadmin.email or not newadmin.name or not newadmin.password or not newadmin.surname or not newadmin.username or not newadmin.phone_number or not newadmin.pesel:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Not enough data provided",
@@ -26,3 +26,7 @@ async def newAdmin(newadmin: UserReg, db: Session = Depends(get_db)):
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error creating new admin"
         )
+
+    return {
+        "status": "success",
+    }

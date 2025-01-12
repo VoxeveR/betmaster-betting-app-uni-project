@@ -13,6 +13,8 @@ def create_new_admin(admin: UserReg, db: Session):
             name=admin.name,
             surname=admin.surname,
             email=str(admin.email),
+            pesel=admin.pesel,
+            phone_number=admin.phone_number,
         )
         db.add(new_admin)
         db.flush()
