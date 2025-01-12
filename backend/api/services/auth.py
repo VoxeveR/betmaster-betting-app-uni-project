@@ -40,6 +40,31 @@ def check_self_exclusion_by_username(username: str, db: Session) -> bool:
         logger.error(e)
         return True
 
+def check_if_user_banned_by_username(username: str, db: Session) -> bool:
+    try:
+        is_banned = db.query(User.is_banned).filter(User.username == username).first()
+
+        if is_banned:
+            return True
+
+        return False
+    except Exception as e:
+        logger.error(e)
+        return False
+
+
+def check_if_user_banned_by_email(email: EmailStr, db: Session) -> bool:
+    try:
+        is_banned = db.query(User.is_banned).filter(User.username == str(email)).first()
+
+        if is_banned:
+            return True
+
+        return False
+    except Exception as e:
+        logger.error(e)
+        return False
+
 def auth_user_by_email(email: EmailStr, password: str, db: Session) -> Optional[dict]:
     try:
         user = db.query(
