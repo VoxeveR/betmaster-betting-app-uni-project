@@ -68,4 +68,5 @@ def get_history(user_id: int, db: Session) -> Optional[dict]:
         return response
     except Exception as e:
         logger.error(e)
+
         return None
