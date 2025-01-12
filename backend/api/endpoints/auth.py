@@ -1,33 +1,51 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from api.services.auth import auth_user, check_self_exclusion
+from api.services.auth import (
+    auth_user_by_email,
+    auth_user_by_username,
+    check_self_exclusion_by_email,
+    check_self_exclusion_by_username
+)
 from api.database.init_db import get_db
 from api.schemas.auth import Login
 
 router = APIRouter()
 @router.post("/login")
-async def login(login: Login, db: Session = Depends(get_db)):
-    if not login.email or not login.password:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="No username or password provided",
-        )
+async def auth(login: Login, db: Session = Depends(get_db)):
+    if login.email:
+        if  check_self_exclusion_by_email(login.email, db):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User is self exclusive",
+            )
 
-    if check_self_exclusion(login.email, db):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="This user is self-exclusive",
-        )
+        resp = auth_user_by_email(login.email, login.password, db)
+        if resp is None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User is not registered",
+            )
 
-    resp = auth_user(login.email, login.password, db)
-    if resp is None:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-        )
+        return {
+            "status": "ok",
+            "data": resp,
+        }
+    elif login.username:
+        if check_self_exclusion_by_username(login.username, db):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User is self exclusive",
+            )
 
+        resp = auth_user_by_username(login.username, login.password, db)
 
-    return {
-        "status": "ok",
-        "data": resp,
-    }
+        if resp is None:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="User is not registered",
+            )
+
+        return {
+            "status": "ok",
+            "data": resp,
+        }
