@@ -174,7 +174,7 @@ function Profile() {
                         <div className="list-group">
                             <div className="list-group-item">
                                 <FaUser className="me-2" />
-                                <Link to="/user_data"> Moje dane </Link>
+                                <Link to="/user_data">Moje dane </Link>
                             </div>
                             <div className="list-group-item">
                                 <FaHistory className="me-2" />
@@ -194,11 +194,11 @@ function Profile() {
                             </div>
                             <div className="list-group-item">
                                 <FaUserShield className="me-2" />
-                                Samowykluczenie
+                                <Link to="/self_exclusion">Samowykluczenie</Link>
                             </div>
                             <div className="list-group-item">
                                 <FaInfoCircle className="me-2" />
-                                Informacja
+                                <Link to="/information">Informacja</Link>
                             </div>
                         </div>
                     </Col>

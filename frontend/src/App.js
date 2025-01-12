@@ -1,5 +1,4 @@
-// App.js
-import React from 'react';
+  import React from 'react';
 import {BrowserRouter, Routes, Route, Link, Navigate, Outlet} from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -15,6 +14,7 @@ import ManageEmployees from './pages/ManageEmployees';
 import AdminLayout from './components/Admin/AdminLayout';
 import BetsHistory from "./pages/BetsHistory";
 import UserData from './pages/UserData';
+import Information from './pages/Information';
 
 const HomePage = () => {
   return (
@@ -216,6 +216,8 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/bets" element ={<Bets/>} />
+          <Route path="/information" element={<Information />} />
+          <Route path="/self_exclusion" element={<Self_exclusion/>} />
           <Route path="/my_bets" element={<BetsHistory/>} />
           <Route path="/user_data" element={<UserData/>} />
           <Route path="/admin" element={<ProtectedAdminRoute />}>
