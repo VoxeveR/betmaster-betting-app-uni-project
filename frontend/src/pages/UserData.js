@@ -8,7 +8,7 @@ function UserData() {
     const [userData, setUserData] = useState({
         username: '',
         name: '',
-        surename: '',
+        surname: '',
         email: '',
         phone_number: '',
     });
@@ -82,8 +82,8 @@ function UserData() {
                                         <Form.Label>Nazwisko</Form.Label>
                                         <Form.Control
                                             type="text"
-                                            value={userData.surename}
-                                            onChange={(e) => setUserData({...userData, surename: e.target.value})}
+                                            value={userData.surname}
+                                            onChange={(e) => setUserData({...userData, surname: e.target.value})}
                                             disabled={!isEditing}
                                         />
                                     </Form.Group>
