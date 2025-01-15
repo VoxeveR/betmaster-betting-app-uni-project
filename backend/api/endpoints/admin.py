@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from api.services.user import checkUserExistEmail
-from api.services.admin import create_new_admin
+from api.services.admin import create_new_admin, get_latest_file
 from api.database.init_db import get_db
 from api.schemas.user import UserReg
 
@@ -29,4 +29,27 @@ async def newAdmin(newadmin: UserReg, db: Session = Depends(get_db)):
 
     return {
         "status": "ok",
+    }
+
+@router.get("/statistics")
+async def statistics(db: Session = Depends(get_db)):
+    stat_img = get_latest_file("..\\static\\img")
+
+    if stat_img is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File not found",
+        )
+
+    stat_pdf = get_latest_file("..\\static\\pdf")
+
+    if stat_pdf is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="File not found",
+        )
+
+    return {
+        "stat_img": stat_img,
+        "stat_pdf": stat_pdf,
     }
