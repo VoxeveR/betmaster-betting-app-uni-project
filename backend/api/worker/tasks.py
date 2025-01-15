@@ -1,13 +1,10 @@
 from datetime import datetime, timedelta
 from sqlalchemy.orm import Session
-from sqlalchemy.sql.coercions import expect
-
+import os
 from api.core.logging import logger
 from api.database.models.games import Games, GameStatus
 from api.database.models.transactions import Transactions
-
 from reportlab.lib.pagesizes import A4
-from reportlab.lib import colors
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Image
 
@@ -30,7 +27,7 @@ def task_check_game_started(db: Session):
 
 def task_generate_raport(db: Session, filename: str):
     try:
-        filename = filename + "_" +  str(datetime.now().date()) + ".pdf"
+        filename =  filename + "_" +  str(datetime.now().date()) + ".pdf"
 
         one_week_ago = datetime.now() - timedelta(days=7)
 
@@ -53,11 +50,16 @@ def task_generate_raport(db: Session, filename: str):
         plt.xticks(rotation = 45)
         plt.grid(True)
         plt.tight_layout()
-        chart_filename = "transactions_chart.png"
+        plot_filename = f"transactions_{str(datetime.now().date())}.png"
+        chart_filename = os.path.join("..\\static\\img", plot_filename)
+        os.makedirs("..\\static\\img", exist_ok=True)
         plt.savefig(chart_filename)
         plt.close()
 
-        pdf = SimpleDocTemplate(filename, pagesize=A4)
+
+        pdf_path = os.path.join("..\\static\\pdf", filename)
+        os.makedirs("..\\static\\pdf", exist_ok=True)
+        pdf = SimpleDocTemplate(pdf_path, pagesize=A4)
         styles = getSampleStyleSheet()
 
         elements = []
@@ -74,6 +76,6 @@ def task_generate_raport(db: Session, filename: str):
         elements.append(chart)
 
         pdf.build(elements)
-        logger.info(f"Raport generated {filename}")
+        logger.info(f"Raport generated {pdf_path}")
     except Exception as e:
         logger.error(e)

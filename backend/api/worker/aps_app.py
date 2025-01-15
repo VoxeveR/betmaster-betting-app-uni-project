@@ -61,5 +61,5 @@ def task_creator(task_function, task_name: str, schedule_type: str, **kwargs):
 
 def start_scheduler():
     task_creator(task_check_game_started, task_name="check_game_started", schedule_type='interval', minutes=1)
-    task_creator(task_generate_raport, task_name="genrate_raport", schedule_type='cron_weekly', day_of_week=3, hour=20, minute=53, filename="test")
+    task_creator(task_generate_raport, task_name="genrate_raport", schedule_type='cron_weekly', day_of_week=3, hour=0, minute=5, filename="test")
 

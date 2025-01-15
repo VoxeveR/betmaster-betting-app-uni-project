@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from api.schemas.user import UserReg
 from api.core.logging import logger
 from api.core.security import hash_password
+import os
 
 def create_new_admin(admin: UserReg, db: Session):
     try:
@@ -33,3 +34,14 @@ def create_new_admin(admin: UserReg, db: Session):
         db.rollback()
         return False
 
+
+def get_latest_file(folder_path):
+
+    files = [os.path.join(folder_path, f) for f in os.listdir(folder_path) if
+             os.path.isfile(os.path.join(folder_path, f))]
+
+    if not files:
+        return None
+
+    latest_file = max(files, key=os.path.getmtime)
+    return latest_file
