@@ -4,7 +4,10 @@ from api.database.models.account import Account
 from typing_extensions import Optional
 from api.database.models.user_roles import UserRoles, Role
 from sqlalchemy.orm import Session
-from api.schemas.user import UserReg
+from api.schemas.user import (
+    UserReg,
+    UserUpdate
+)
 from api.core.logging import logger
 from api.core.security import hash_password
 
@@ -196,6 +199,23 @@ def delete_user(user_id: int, db: Session) -> bool:
 
         user = db.query(User).filter(User.user_id == user_id).first()
         db.delete(user)
+        db.commit()
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
+
+
+def update_user(user_id: int, user_update: UserUpdate, db: Session) -> bool:
+    try:
+        user = db.query(User).filter(User.user_id == user_id).first()
+
+        for key, value in user_update.dict().items():
+            if value is not None:
+                setattr(user, key, value)
+
         db.commit()
 
         return True

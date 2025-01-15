@@ -10,9 +10,13 @@ from api.services.user import (
     get_employees,
     ban_user,
     delete_user,
+    update_user,
 )
 from api.database.init_db import get_db
-from api.schemas.user import UserReg
+from api.schemas.user import (
+    UserReg,
+    UserUpdate
+)
 
 router = APIRouter()
 
@@ -61,10 +65,23 @@ async def me(user_id: int, db: Session = Depends(get_db)):
     }
 
 @router.patch("/update/{user_id}")
-async def update(user_id: int, db: Session = Depends(get_db)):
-    # Zwrócic tylko zmienione dane
-    # dodać pola aktywne w zakładach
-    pass
+async def update(user_id: int, user_update: UserUpdate, db: Session = Depends(get_db)):
+    if checkUserExistById(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_404_CONFLICT,
+            detail="User not found",
+        )
+
+
+    if not update_user(user_id, user_update, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error updating user",
+        )
+
+    return {
+        "status": "ok",
+    }
 
 @router.get("/clients")
 async def clients(db: Session = Depends(get_db)):
