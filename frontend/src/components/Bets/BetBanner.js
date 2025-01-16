@@ -8,6 +8,9 @@ const BetBanner = ({ betData = {}, betID, selectData, onBetSelect }) => {
         start_time = '',
         home = '',
         away = '',
+        odds1 = '',
+        oddsX = '',
+        odds2 = ''
     } = betData || {};
 
     // Get current value directly from session storage
@@ -17,6 +20,8 @@ const BetBanner = ({ betData = {}, betID, selectData, onBetSelect }) => {
     const handleSelection = (value) => {
         onBetSelect(value);
     };
+
+
 
     return (
         <div className="container mt-2 rounded p-3" style={{background: '#E3EFFB'}}>
@@ -39,22 +44,28 @@ const BetBanner = ({ betData = {}, betID, selectData, onBetSelect }) => {
                             id={`1:${betID}`}
                             value="1"
                             onClick={() => handleSelection(`${betID}:1`)}
+                            className="buttonStyle"
                         >
-                            1.
+                            <span className="typeStyle">1</span>
+                            <span className="oddsStyle">{odds1}</span>
                         </ToggleButton>
                         <ToggleButton
                             id={`X:${betID}`}
                             value="X"
                             onClick={() => handleSelection(`${betID}:X`)}
+                            className="buttonStyle"
                         >
-                            X
+                            <span className="typeStyle">X</span>
+                            <span className="oddsStyle">{oddsX}</span>
                         </ToggleButton>
                         <ToggleButton
                             id={`2:${betID}`}
                             value="2"
                             onClick={() => handleSelection(`${betID}:2`)}
+                            className="buttonStyle"
                         >
-                            2.
+                            <span className="typeStyle">2</span>
+                            <span className="oddsStyle">{odds2}</span>
                         </ToggleButton>
                     </ToggleButtonGroup>
                 </div>
