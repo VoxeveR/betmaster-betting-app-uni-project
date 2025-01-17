@@ -39,7 +39,7 @@ function Profile() {
                 amount: amount,
             })
                 .then(res => {
-                    if (res.data.status === 'success') {
+                    if (res.data.status === 'ok') {
                         setUserBalance(prevBalance => prevBalance + Number(amount));
                         setShowDepositAlert(false);
                         setAmount('');
@@ -68,7 +68,7 @@ function Profile() {
                 amount: -amount,
             })
                 .then(res => {
-                    if (res.data.status === 'success') {
+                    if (res.data.status === 'ok') {
                         setUserBalance(prevBalance => prevBalance - Number(amount));
                         setShowWithdrawalAlert(false);
                         setAmount('');

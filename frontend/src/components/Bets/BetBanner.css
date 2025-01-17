@@ -1,0 +1,19 @@
+.buttonStyle {
+    display: flex;
+    width: 4vw;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px 15px;
+    gap: 2px;
+}
+
+.typeStyle {
+    font-size: 0.8rem;
+    line-height: 1;
+}
+
+.oddsStyle {
+    font-size: 1.1rem;
+    font-weight: bold;
+    line-height: 1;
+}

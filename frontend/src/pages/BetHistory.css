@@ -1,0 +1,40 @@
+.tabs-container {
+    height: calc(100vh - 175px);
+    display: flex;
+    flex-direction: column;
+}
+
+.tab-content {
+    flex: 1;
+    min-height: 0;
+}
+
+.scrollable-content {
+    height: calc(100vh - 175px);
+    overflow: hidden;
+    position: relative;
+    padding-right: 10px;
+}
+
+.scrollable-content:hover {
+    overflow-y: auto;
+}
+
+.scrollable-content::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 3px;
+}
+
+.scrollable-content::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+.scrollable-content {
+    scrollbar-width: thin;
+    scrollbar-color: #888 transparent;
+}
