@@ -3,6 +3,7 @@ from apscheduler.triggers.cron import CronTrigger
 from api.worker.tasks import (
     task_check_game_started,
     task_generate_raport,
+    task_check_game_ended,
 )
 from api.core.logging import logger
 from api.database.init_db import SessionLocal
@@ -62,4 +63,4 @@ def task_creator(task_function, task_name: str, schedule_type: str, **kwargs):
 def start_scheduler():
     task_creator(task_check_game_started, task_name="check_game_started", schedule_type='interval', minutes=1)
     task_creator(task_generate_raport, task_name="genrate_raport", schedule_type='cron_weekly', day_of_week=3, hour=0, minute=5, filename="test")
-
+    task_creator(task_check_game_ended, task_name="check_game_ended", schedule_type='interval', minutes=1)

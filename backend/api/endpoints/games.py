@@ -5,6 +5,7 @@ from api.database.init_db import get_db
 from api.schemas.games import (
     NewGame,
     GameUpdate,
+    Result,
 )
 from api.services.games import (
     get_games_categories,
@@ -12,9 +13,11 @@ from api.services.games import (
     checkGameExistsByHomeAway,
     checkGameExistById,
     checkGameHaveBets,
+    checkGameNotPlaying,
     add_new_game,
     update_game_by_id,
     delete_game,
+    set_game_result,
 )
 
 router = APIRouter()
@@ -58,26 +61,26 @@ async def get_games(event_name: str, db: Session = Depends(get_db)):
     }
 
 @router.post("/")
-async def new_game(new_game: NewGame, db: Session = Depends(get_db)):
-    if not isinstance(new_game, NewGame):
+async def new_game(new_game_json: NewGame, db: Session = Depends(get_db)):
+    if not isinstance(new_game_json, NewGame):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="New game must be provided",
         )
 
-    if new_game.start_time < datetime.now():
+    if new_game_json.start_time < datetime.now():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Game already started",
         )
 
-    if not checkGameExistsByHomeAway(new_game.home, new_game.away, new_game.event_name, db):
+    if not checkGameExistsByHomeAway(new_game_json.home, new_game_json.away, new_game_json.event_name, db):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Game already exists",
         )
 
-    if not add_new_game(new_game, db):
+    if not add_new_game(new_game_json, db):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Something went wrong",
@@ -133,6 +136,30 @@ async def delete(game_id: int, db: Session = Depends(get_db)):
             detail="Something went wrong",
         )
     
+    return {
+        "status": "ok",
+    }
+
+@router.post("/set-result/{game_id}")
+async def set_result(game_id: int, result: Result, db: Session = Depends(get_db)):
+    if checkGameExistById(game_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Game not found",
+        )
+
+    if checkGameNotPlaying(game_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Game not playing",
+        )
+
+    if not set_game_result(game_id, result, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Something went wrong",
+        )
+
     return {
         "status": "ok",
     }
