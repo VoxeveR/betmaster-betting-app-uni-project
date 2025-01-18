@@ -1,6 +1,4 @@
 from datetime import datetime
-from typing import Optional
-
 from pydantic import BaseModel
 from typing import Optional
 
@@ -23,3 +21,7 @@ class GameUpdate(BaseModel):
     game_status: Optional[str]
     sport_type: Optional[str]
     game_type: Optional[str]
+
+
+class Result(BaseModel):
+    result: str

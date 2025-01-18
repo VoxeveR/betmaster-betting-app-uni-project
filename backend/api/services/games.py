@@ -10,6 +10,7 @@ from collections import defaultdict
 from api.schemas.games import (
     NewGame,
     GameUpdate,
+    Result,
 )
 
 
@@ -37,6 +38,11 @@ def checkGameHaveBets(game_id: int, db: Session) -> bool:
 
     return True if games else False
 
+def checkGameNotPlaying(game_id: int, db: Session) -> bool:
+    game = db.query(Games).filter(Games.game_id == game_id).first()
+
+    return True if game.game_status != GameStatus.PLAYING else False
+
 def get_games_categories(db: Session) -> Optional[defaultdict]:
     try:
         result = db.query(Games.sport_type, Games.event_name).filter(Games.game_status != GameStatus.FINISHED).all()
@@ -54,7 +60,7 @@ def get_games_categories(db: Session) -> Optional[defaultdict]:
 
 def get_games_by_event_name(event_name: str, db: Session) -> Optional[dict]:
     try:
-        result = db.query(Games.game_id, Games.home, Games.away, Games.start_time, Games.game_status, Odds.odds, Odds.odds_type).join(Odds).filter(Games.event_name == event_name and Games.game_status != GameStatus.FINISHED).all()
+        result = db.query(Games.game_id, Games.home, Games.away, Games.start_time, Games.game_status, Odds.odds, Odds.odds_type).join(Odds).filter((Games.event_name == event_name) & (Games.game_status != GameStatus.FINISHED)).all()
 
         grouped_games = {}
 
@@ -156,6 +162,20 @@ def delete_game(game_id: int, db: Session) -> bool:
         db.flush()
 
         db.query(Games).filter(Games.game_id == game_id).delete()
+        db.commit()
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
+
+def set_game_result(game_id: int, game_result: Result, db: Session) -> bool:
+    try:
+        db.query(Games).filter(Games.game_id == game_id).update(
+            {Games.game_result: game_result.result, Games.game_status: GameStatus.FINISHED}
+        )
+
         db.commit()
 
         return True
