@@ -67,6 +67,11 @@ function BetBox({handleDeleteBet, handleUpdateBets}) {
             setError("Podaj kwotę zakładu!");
             return;
         }
+        if(!sessionStorage.getItem("isLogged")){
+            setError("Zaloguj się!");
+            return;
+        }
+
         const userID = sessionStorage.getItem('userID');
         const games = currentBetDetails.reduce((acc, bet) => {
             acc[bet.betID] = bet.userSelection;

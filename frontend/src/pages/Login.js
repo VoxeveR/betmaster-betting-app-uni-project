@@ -62,11 +62,11 @@ const Login = () => {
 
       if (response.data.status === 'ok') {
         console.log('Zalogowano pomyślnie');
-        console.log(response.data.data);
         sessionStorage.setItem('isLogged', 'true');
         sessionStorage.setItem('userID', response.data.data.user_id);
         sessionStorage.setItem('role', response.data.data.role);
         sessionStorage.setItem('balance', response.data.data.balance);
+
         if(response.data.data.role === 'ADMIN'){
           navigate('/Admin');
         }else{
@@ -75,6 +75,10 @@ const Login = () => {
       }
 
     } catch (err) {
+      if(err.response.data.detail === 'User is banned'){
+        setError('Konto użytkownika zablokowane. Skontaktuj się z działem obsługi klienta.');
+        return;
+      }
       setError('Wystąpił błąd podczas logowania. Sprawdź dane logowania i spróbuj ponownie.');
       console.error('Błąd logowania:', err);
     } finally {
