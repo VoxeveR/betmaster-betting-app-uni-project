@@ -50,9 +50,6 @@ const ManageGames = () => {
       odds2: formData.kurs2,
       oddsX: ((formData.kursX) ? formData.kursX: null)
     }
-    console.log("XD", data.start_time);
-
-    console.log("xd", data);
 
     axios.post("http://localhost:8000/api/games/", data).then(res => {
       console.log(res.data);
@@ -61,9 +58,7 @@ const ManageGames = () => {
       console.log(err.detail);
     })
 
-    console.log(formData);
     setFormData({});
-    console.log(formData);
   };
 
 

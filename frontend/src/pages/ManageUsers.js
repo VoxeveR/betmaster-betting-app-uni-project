@@ -19,6 +19,7 @@ const ManageUsers = () => {
     }
   }, []);
 
+
   const handleBanUser = async (user_id) => {
     try {
       const response = await axios.patch(`http://localhost:8000/api/users/ban/${user_id}`);
