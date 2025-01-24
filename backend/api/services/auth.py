@@ -57,7 +57,7 @@ def check_if_user_banned_by_email(email: EmailStr, db: Session) -> bool:
     try:
         is_banned = db.query(User.is_banned).filter(User.email == str(email)).first()
 
-        if is_banned:
+        if is_banned.is_banned:
             return True
 
         return False
