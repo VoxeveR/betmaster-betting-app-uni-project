@@ -21,7 +21,7 @@ async def auth(login: Login, db: Session = Depends(get_db)):
                 detail="User is self exclusive",
             )
 
-        if not check_if_user_banned_by_email(login.email, db):
+        if check_if_user_banned_by_email(login.email, db):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User is banned",
@@ -45,7 +45,7 @@ async def auth(login: Login, db: Session = Depends(get_db)):
                 detail="User is self exclusive",
             )
 
-        if not check_if_user_banned_by_username(login.username, db):
+        if check_if_user_banned_by_username(login.username, db):
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User is banned",
