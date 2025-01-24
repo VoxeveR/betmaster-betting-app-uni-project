@@ -31,6 +31,17 @@ const ManageEmployees = () => {
     }
   }, []);
 
+  const handleRemoveUser = async (user_id) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/users/${user_id}`);
+      if (response.data.status === 'ok') {
+        setEmployees(employees.filter(emp => emp.user_id !== user_id));
+      }
+    } catch (error) {
+      console.error('Failed to remove employee:', error);
+    }
+  }
+
   const handleAddEmployee = async (e) => {
     e.preventDefault();
 
@@ -113,8 +124,8 @@ const ManageEmployees = () => {
                 <td>{employee.pesel}</td>
                 <td>{employee.role}</td>
                 <td>
-                  <Button variant="warning" size="sm">Edytuj</Button>{' '}
-                  <Button variant="danger" size="sm">Usuń</Button>
+                  {/*<Button variant="warning" size="sm">Edytuj</Button>{' '}*/}
+                  <Button variant="danger" size="sm" onClick={() => handleRemoveUser(employee.user_id)}>Usuń</Button>
                 </td>
               </tr>
           ))}
