@@ -50,6 +50,7 @@ const ManageGames = () => {
       odds2: formData.kurs2,
       oddsX: ((formData.kursX) ? formData.kursX: null)
     }
+    console.log("XD", data.start_time);
 
     console.log("xd", data);
 

@@ -6,29 +6,35 @@ import axios from 'axios';
 
 function SelfExclusion() {
     const [exclusionDate, setExclusionDate] = useState('');
+    const [exclusionTime, setExclusionTime] = useState('');
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [error, setError] = useState('');
     const userID = sessionStorage.getItem('userID');
     const navigate = useNavigate();
 
-    // Get tomorrow's date as minimum date for the picker
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const minDate = tomorrow.toISOString().split('T')[0];
 
     const handleExclusion = async () => {
-        if (!exclusionDate) {
-            setError('Proszę wybrać datę samowykluczenia');
+        if (!exclusionDate || !exclusionTime) {
+            setError('Proszę wybrać datę i godzinę samowykluczenia');
             return;
         }
 
         try {
-            const response = await axios.post(`http://localhost:8000/api/account/self-exclusion/${userID}`, {
-                start_date: new Date(),
-                end_date: exclusionDate
+            const startDate = new Date().toISOString().replace('T', ' ').slice(0, 16);
+            const formattedDateTime = `${exclusionDate} ${exclusionTime}`;
+
+            console.log(                {start_date: startDate,
+                end_date: formattedDateTime});
+
+            const response = await axios.post(`http://localhost:8000/api/selfexclusion/${userID}`, {
+                start_date: startDate,
+                end_date: formattedDateTime
             });
 
-            if (response.data.status === 'success') {
+            if (response.data.status === 'ok') {
                 sessionStorage.clear();
                 navigate('/login');
             }
@@ -39,8 +45,15 @@ function SelfExclusion() {
     };
 
     const formatDate = (dateString) => {
+        const date = new Date(dateString);
         const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        return new Date(dateString).toLocaleDateString('pl-PL', options);
+        return date.toLocaleDateString('pl-PL', options);
+    };
+
+    const formatDateTime = (date, time) => {
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        const dateTime = new Date(`${date}T${time}`);
+        return dateTime.toLocaleDateString('pl-PL', options);
     };
 
     return (
@@ -73,12 +86,19 @@ function SelfExclusion() {
                                 {!showConfirmation ? (
                                     <>
                                         <Form.Group className="mb-4">
-                                            <Form.Label>Wybierz datę do kiedy chcesz wykluczyć konto:</Form.Label>
+                                            <Form.Label>Wybierz datę i godzinę do kiedy chcesz wykluczyć konto:</Form.Label>
                                             <Form.Control
                                                 type="date"
                                                 value={exclusionDate}
                                                 onChange={(e) => setExclusionDate(e.target.value)}
                                                 min={minDate}
+                                                isInvalid={!!error}
+                                                className="mb-2"
+                                            />
+                                            <Form.Control
+                                                type="time"
+                                                value={exclusionTime}
+                                                onChange={(e) => setExclusionTime(e.target.value)}
                                                 isInvalid={!!error}
                                             />
                                             <Form.Control.Feedback type="invalid">
@@ -89,7 +109,7 @@ function SelfExclusion() {
                                             <Button
                                                 variant="danger"
                                                 onClick={() => setShowConfirmation(true)}
-                                                disabled={!exclusionDate}
+                                                disabled={!exclusionDate || !exclusionTime}
                                             >
                                                 Kontynuuj
                                             </Button>
@@ -100,7 +120,7 @@ function SelfExclusion() {
                                         <Alert variant="danger">
                                             <Alert.Heading>Potwierdzenie samowykluczenia</Alert.Heading>
                                             <p>
-                                                Czy na pewno chcesz wykluczyć swoje konto do dnia: {formatDate(exclusionDate)}?
+                                                Czy na pewno chcesz wykluczyć swoje konto do: {formatDateTime(exclusionDate, exclusionTime)}?
                                             </p>
                                             <p className="mb-0">
                                                 Ta operacja jest nieodwracalna.

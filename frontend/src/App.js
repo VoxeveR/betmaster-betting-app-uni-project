@@ -3,7 +3,7 @@ import {BrowserRouter, Routes, Route, Link, Navigate, Outlet} from 'react-router
 import Login from './pages/Login';
 import Register from './pages/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Self_exclusion from './pages/Self_exclusion';
+import Self_exclusion from './pages/SelfExclusion';
 import MyNavbar from "./components/Navbar"
 import Bets from './pages/Bets';
 import Profile from './pages/Profile';
@@ -202,24 +202,30 @@ const HomePage = () => {
 
 const ProtectedAdminRoute = () => {
   const isAdmin = sessionStorage.getItem('role') === 'ADMIN';
-  const isAdmin2 = true; //TODO: REMOVE
-  return isAdmin2 ? <Outlet /> : <Navigate to="/" replace />;
+  return isAdmin ? <Outlet /> : <Navigate to="/" replace />;
 };
+
+const ProtectedUserRoute = () => {
+  const isUser = sessionStorage.getItem('role') === 'USER';
+  return isUser ? <Outlet /> : <Navigate to="/" replace />;
+}
 
 function App() {
 
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/bets" element ={<Bets/>} />
-          <Route path="/information" element={<Information />} />
-          <Route path="/self_exclusion" element={<Self_exclusion/>} />
-          <Route path="/my_bets" element={<BetsHistory/>} />
-          <Route path="/user_data" element={<UserData/>} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/bets" element ={<Bets/>} />
+          <Route path="/" element={<ProtectedUserRoute />} >
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/information" element={<Information />} />
+            <Route path="/self_exclusion" element={<Self_exclusion/>} />
+            <Route path="/my_bets" element={<BetsHistory/>} />
+            <Route path="/user_data" element={<UserData/>} />
+          </Route>
           <Route path="/admin" element={<ProtectedAdminRoute />}>
             <Route element={<AdminLayout />}>
               <Route index element={<Admin />} />
@@ -229,6 +235,7 @@ function App() {
               <Route path="stats" element={<Stats />} />
             </Route>
           </Route>
+
         </Routes>
       </BrowserRouter>
   );
