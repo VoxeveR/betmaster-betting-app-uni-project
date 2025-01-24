@@ -9,7 +9,7 @@ const ManageGames = () => {
   const [formData, setFormData] = useState({});
   const [betsList, setBetsList] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [selectedEvent,   setSelectedEvent] = useState(null);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   const gameFields = [
     { name: 'category', label: 'Kategoria', type: 'text', required: true },
@@ -35,7 +35,24 @@ const ManageGames = () => {
     }
   }, []);
 
-
+  const handleSetResult = async (game_id, result) => {
+    try {
+      const response = await axios.post(`http://localhost:8000/api/games/set-result/${game_id}`, {
+        result: result
+      });
+      if(response.data.status === 'ok') {
+        setBetsList(prevBets => ({
+          ...prevBets,
+          [game_id]: {
+            ...prevBets[game_id],
+            result: result
+          }
+        }));
+      }
+    } catch (error) {
+      console.error('Error setting result:', error);
+    }
+  };
 
   const handleAddGame = () => {
     setShowModal(false);
@@ -61,7 +78,6 @@ const ManageGames = () => {
     setFormData({});
   };
 
-
   const handleSelectEvent = async (category, event) => {
     setSelectedCategory(category);
     setSelectedEvent(event);
@@ -69,6 +85,8 @@ const ManageGames = () => {
     try {
       const response = await axios.get(`http://localhost:8000/api/games/${event}`);
       setBetsList(response.data.data);
+      console.log(betsList);
+      console.log(Object.entries(betsList));
     } catch (error) {
       console.error('Error fetching games:', error);
     }
@@ -87,19 +105,19 @@ const ManageGames = () => {
               {console.log(Object.entries(categoryList))}
               {Object.entries(categoryList).map(([category, events]) => (
                   <>
-                  <Dropdown key={category}  drop="end" autoClose="outside">
-                    <Dropdown.Toggle className="dropdown-item">
-                      {category}
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                      {events.map((event) => (
-                          <Dropdown.Item key={event}
-                                         onClick={() => handleSelectEvent(category, event)}>
-                            {event}
-                          </Dropdown.Item>
-                      ))}
-                    </Dropdown.Menu>
-                  </Dropdown>
+                    <Dropdown key={category}  drop="end" autoClose="outside">
+                      <Dropdown.Toggle className="dropdown-item">
+                        {category}
+                      </Dropdown.Toggle>
+                      <Dropdown.Menu>
+                        {events.map((event) => (
+                            <Dropdown.Item key={event}
+                                           onClick={() => handleSelectEvent(category, event)}>
+                              {event}
+                            </Dropdown.Item>
+                        ))}
+                      </Dropdown.Menu>
+                    </Dropdown>
                   </>
               ))}
             </Dropdown.Menu>
@@ -121,19 +139,31 @@ const ManageGames = () => {
           </thead>
           <tbody>
           {Object.entries(betsList).map(([key, betData]) => (
-              <tr key={betData.id}>
+              <tr key={key}>
                 <td><b>{betData.home}</b> vs <b>{betData.away}</b></td>
-
-
                 <td>{betData.start_date}</td>
                 <td>{betData.start_time}</td>
                 <td>{betData.odds1}</td>
                 <td>{betData.odds2}</td>
                 <td>{betData.oddsX}</td>
-                <td></td>
+                <td>{betData.game_status}</td>
                 <td>
-                  <Button variant="warning" size="sm">Edytuj</Button>{' '}
-                  <Button variant="danger" size="sm">Usuń</Button>
+                  <Dropdown>
+                    <Dropdown.Toggle variant="primary" size="sm">
+                      Ustaw Wynik
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      <Dropdown.Item onClick={() => handleSetResult(key, 'One')}>
+                        Zwycięstwo {betData.home}
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleSetResult(key,'X')}>
+                        Remis
+                      </Dropdown.Item>
+                      <Dropdown.Item onClick={() => handleSetResult(key, 'Two')}>
+                        Zwycięstwo {betData.away}
+                      </Dropdown.Item>
+                    </Dropdown.Menu>
+                  </Dropdown>
                 </td>
               </tr>
           ))}
