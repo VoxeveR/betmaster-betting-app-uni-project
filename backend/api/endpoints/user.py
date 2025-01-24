@@ -102,6 +102,7 @@ async def clients(db: Session = Depends(get_db)):
 
 @router.get("/employees")
 async def employees(db: Session = Depends(get_db)):
+
     employees_dict = get_employees(db)
 
     if employees_dict is None:
