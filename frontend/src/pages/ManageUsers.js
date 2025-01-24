@@ -3,7 +3,7 @@ import { Table, Button, Modal, Form } from 'react-bootstrap';
 import axios from "axios";
 
 const ManageUsers = () => {
-  const [users, setUsers] = useState(['']);
+  const [users, setUsers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', is_banned: false });
 
@@ -19,35 +19,33 @@ const ManageUsers = () => {
     }
   }, []);
 
-  const handleBanUser = (user_id) => {
+  const handleBanUser = async (user_id) => {
     try {
-      console.log(user_id);
-      axios.patch(`http://localhost:8000/api/users/ban/${user_id}`)
-      .then((response) => {
-        console.log(response.data);
-        if (response.data.status === 'success') {
-          setUsers(users.map(user => user.user_id === user_id ? { ...user, is_banned: true } : user));
-        }
-      })
-    }
-    catch(error) {
-      console.log(error.response.data);
+      const response = await axios.patch(`http://localhost:8000/api/users/ban/${user_id}`);
+
+      if (response.data.status === 'ok') {
+        setUsers(currentUsers => {
+          const updatedUsers = currentUsers.map(user =>
+              user.user_id === user_id ? {...user, is_banned: true} : user
+          );
+          return updatedUsers;
+        });
+      }
+    } catch (error) {
+      console.error('Failed to ban user:', error);
     }
   };
 
-  const handleUnbanUser = (user_id) => {
+  const handleUnbanUser = async (user_id) => {
     try {
-      console.log(user_id);
-      axios.patch(`http://localhost:8000/api/users/unban/${user_id}`)
-          .then((response) => {
-            console.log(response.data);
-            if (response.data.status === 'success') {
-              setUsers(users.map(user => user.user_id === user_id ? { ...user, is_banned: false } : user));
-            }
-          })
-    }
-    catch(error) {
-      console.log(error.response.data);
+      const response = await axios.patch(`http://localhost:8000/api/users/unban/${user_id}`);
+      if (response.data.status === 'ok') {
+        setUsers(users.map(user =>
+            user.user_id === user_id ? { ...user, is_banned: false } : user
+        ));
+      }
+    } catch (error) {
+      console.error('Failed to unban user:', error);
     }
   };
 

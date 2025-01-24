@@ -3,7 +3,7 @@ import {BrowserRouter, Routes, Route, Link, Navigate, Outlet} from 'react-router
 import Login from './pages/Login';
 import Register from './pages/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Self_exclusion from './pages/Self_exclusion';
+import Self_exclusion from './pages/SelfExclusion';
 import MyNavbar from "./components/Navbar"
 import Bets from './pages/Bets';
 import Profile from './pages/Profile';
@@ -202,8 +202,7 @@ const HomePage = () => {
 
 const ProtectedAdminRoute = () => {
   const isAdmin = sessionStorage.getItem('role') === 'ADMIN';
-  const isAdmin2 = true; //TODO: REMOVE
-  return isAdmin2 ? <Outlet /> : <Navigate to="/" replace />;
+  return isAdmin ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 function App() {
