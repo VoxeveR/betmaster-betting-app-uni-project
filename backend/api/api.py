@@ -6,6 +6,7 @@ from api.endpoints import (
     games,
     bets,
     account,
+    selfexclusion,
 )
 
 api_router = APIRouter()
@@ -44,4 +45,10 @@ api_router.include_router(
     account.router,
     prefix="/account",
     tags=["account"]
+)
+
+api_router.include_router(
+    selfexclusion.router,
+    prefix="/selfexclusion",
+    tags=["selfexclusion"]
 )
