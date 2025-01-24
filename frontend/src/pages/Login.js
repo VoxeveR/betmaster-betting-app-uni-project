@@ -79,6 +79,10 @@ const Login = () => {
         setError('Konto użytkownika zablokowane. Skontaktuj się z działem obsługi klienta.');
         return;
       }
+      if(err.response.data.detail === 'User is self exclusive'){
+        setError('Dokonano samowykluczenia. Skontaktuj sie z działem obsługi klienta w celu odblokowania konta.');
+        return;
+      }
       setError('Wystąpił błąd podczas logowania. Sprawdź dane logowania i spróbuj ponownie.');
       console.error('Błąd logowania:', err);
     } finally {

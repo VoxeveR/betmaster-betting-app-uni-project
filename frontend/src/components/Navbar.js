@@ -30,7 +30,6 @@ const MyNavbar = () => {
               <>
                 <Link to="/my_bets" className="nav-link mt-1">Bets</Link>
                 <Link to="/profile" className="nav-link mt-1">Profile</Link>
-                {role === 'ADMIN' && <Link as={Link} to="/admin">Panel Administratora</Link>}
                 <div className="btn btn-light ms-2" onClick={handleLogout}>Logout</div>
               </>
             ) : (
