@@ -44,7 +44,7 @@ def check_if_user_banned_by_username(username: str, db: Session) -> bool:
     try:
         is_banned = db.query(User.is_banned).filter(User.username == username).first()
 
-        if is_banned:
+        if is_banned.is_banned:
             return True
 
         return False
