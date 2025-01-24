@@ -170,7 +170,7 @@ async def unban(user_id: int, db: Session = Depends(get_db)):
     if checkUserUnbanned(user_id, db):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
-            detail="User already banned",
+            detail="User is not banned",
         )
 
     if not unban_user(user_id, db):
