@@ -205,20 +205,27 @@ const ProtectedAdminRoute = () => {
   return isAdmin ? <Outlet /> : <Navigate to="/" replace />;
 };
 
+const ProtectedUserRoute = () => {
+  const isUser = sessionStorage.getItem('role') === 'USER';
+  return isUser ? <Outlet /> : <Navigate to="/" replace />;
+}
+
 function App() {
 
   return (
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/bets" element ={<Bets/>} />
-          <Route path="/information" element={<Information />} />
-          <Route path="/self_exclusion" element={<Self_exclusion/>} />
-          <Route path="/my_bets" element={<BetsHistory/>} />
-          <Route path="/user_data" element={<UserData/>} />
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/bets" element ={<Bets/>} />
+          <Route path="/" element={<ProtectedUserRoute />} >
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/information" element={<Information />} />
+            <Route path="/self_exclusion" element={<Self_exclusion/>} />
+            <Route path="/my_bets" element={<BetsHistory/>} />
+            <Route path="/user_data" element={<UserData/>} />
+          </Route>
           <Route path="/admin" element={<ProtectedAdminRoute />}>
             <Route element={<AdminLayout />}>
               <Route index element={<Admin />} />
@@ -228,6 +235,7 @@ function App() {
               <Route path="stats" element={<Stats />} />
             </Route>
           </Route>
+
         </Routes>
       </BrowserRouter>
   );
