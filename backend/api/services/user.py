@@ -38,6 +38,18 @@ def checkUserBanned(user_id: int, db: Session) -> bool:
         logger.error(e)
         return False
 
+def checkUserUnbanned(user_id: int, db: Session) -> bool:
+    try:
+        user = db.query(User).filter(User.user_id == user_id).first()
+
+        if user.is_banned:
+            return False
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        return True
+
 def create_user(user: UserReg, db: Session):
     try:
 
@@ -182,6 +194,17 @@ def get_employees(db: Session) -> Optional[dict]:
 def ban_user(user_id: int, db: Session) -> bool:
     try:
         db.query(User).filter(User.user_id == user_id).update({User.is_banned: True})
+        db.commit()
+
+        return True
+    except Exception as e:
+        logger.error(e)
+        db.rollback()
+        return False
+
+def unban_user(user_id: int, db: Session) -> bool:
+    try:
+        db.query(User).filter(User.user_id == user_id).update({User.is_banned: False})
         db.commit()
 
         return True

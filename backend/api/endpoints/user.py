@@ -5,10 +5,12 @@ from api.services.user import (
     get_user_detials,
     checkUserExistEmail,
     checkUserBanned,
+    checkUserUnbanned,
     checkUserExistById,
     get_clients,
     get_employees,
     ban_user,
+    unban_user,
     delete_user,
     update_user,
 )
@@ -148,6 +150,30 @@ async def ban(user_id: int, db: Session = Depends(get_db)):
         )
 
     if not ban_user(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Error banning user",
+        )
+
+    return {
+        "status": "ok",
+    }
+
+@router.patch("/unban/{user_id}")
+async def unban(user_id: int, db: Session = Depends(get_db)):
+    if checkUserExistById(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User does not exist",
+        )
+
+    if checkUserUnbanned(user_id, db):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="User already banned",
+        )
+
+    if not unban_user(user_id, db):
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Error banning user",
