@@ -175,6 +175,7 @@ def get_employees(db: Session) -> Optional[dict]:
 
         for user_id, email, name, surname, phone_number, id_number, username, pesel, role_name in clients:
             response[user_id] = {
+                "user_id": user_id,
                 "email": email,
                 "name": name,
                 "surname": surname,
