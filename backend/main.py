@@ -4,7 +4,7 @@ from api.api import api_router
 from api.core.logging import logger
 from api.worker.aps_app import start_scheduler
 from datetime import datetime
-
+from fastapi.staticfiles import StaticFiles
 app = FastAPI()
 
 app.add_middleware(
@@ -19,6 +19,8 @@ app.include_router(
     api_router,
     prefix="/api",
 )
+
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.middleware("http")

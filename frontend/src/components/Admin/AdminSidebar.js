@@ -14,6 +14,9 @@ const AdminSidebar = () => {
       <Nav.Item>
         <Nav.Link as={Link} to="/admin/manage-employees">Zarządzaj pracownikami</Nav.Link>
       </Nav.Item>
+        <Nav.Item>
+            <Nav.Link as={Link} to="/admin/stats">Statystyki</Nav.Link>
+        </Nav.Item>
     </Nav>
   );
 };

@@ -15,6 +15,7 @@ import AdminLayout from './components/Admin/AdminLayout';
 import BetsHistory from "./pages/BetsHistory";
 import UserData from './pages/UserData';
 import Information from './pages/Information';
+import Stats from './pages/Stats';
 
 const HomePage = () => {
   return (
@@ -206,7 +207,6 @@ const ProtectedAdminRoute = () => {
 };
 
 function App() {
-  document.title = "BetMaster";
 
   return (
       <BrowserRouter>
@@ -226,6 +226,7 @@ function App() {
               <Route path="manage-games" element={<ManageGames />} />
               <Route path="manage-users" element={<ManageUsers />} />
               <Route path="manage-employees" element={<ManageEmployees />} />
+              <Route path="stats" element={<Stats />} />
             </Route>
           </Route>
         </Routes>
