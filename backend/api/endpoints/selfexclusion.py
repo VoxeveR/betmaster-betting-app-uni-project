@@ -2,13 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from api.database.init_db import get_db
 from api.services.user import checkUserExistById
-from api.schemas.selfexclusion import SelfExclusion
+from api.schemas.selfexclusion import SelfExclusionModel
 from api.services.selfexclusion import add_selfexclusion
 
 router = APIRouter()
 
 @router.post("/{user_id}")
-async def selfexclusion(user_id: int, new_selfexclusion: SelfExclusion,  db: Session = Depends(get_db)):
+async def selfexclusion(user_id: int, new_selfexclusion: SelfExclusionModel,  db: Session = Depends(get_db)):
     if checkUserExistById(user_id, db):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -23,7 +23,7 @@ async def selfexclusion(user_id: int, new_selfexclusion: SelfExclusion,  db: Ses
 
     if not add_selfexclusion(user_id, new_selfexclusion, db):
         raise HTTPException(
-            status_code=status.HTTP_500_BAD_REQUEST,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="self exclusion failed",
         )
 

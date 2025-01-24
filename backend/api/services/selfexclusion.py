@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
 
-from api.core import logging
+from api.core.logging import logger
 from api.database.models.selfexclusion import SelfExclusion
-from api.schemas.selfexclusion import SelfExclusion
+from api.schemas.selfexclusion import SelfExclusionModel
 
 
-def add_selfexclusion(user_id: int, selfExclusion: SelfExclusion, db: Session) -> bool:
+def add_selfexclusion(user_id: int, selfExclusion: SelfExclusionModel, db: Session) -> bool:
     try:
         new_selfExclusion = SelfExclusion(
             user_id=user_id,
@@ -18,6 +18,6 @@ def add_selfexclusion(user_id: int, selfExclusion: SelfExclusion, db: Session) -
 
         return True
     except Exception as e:
-        logging.error(e)
+        logger.error(e)
         db.rollback()
         return False
