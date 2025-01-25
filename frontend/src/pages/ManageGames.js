@@ -10,6 +10,7 @@ const ManageGames = () => {
   const [betsList, setBetsList] = useState({});
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [finishedGames, setFinishedGames] = useState(new Map());
 
   const gameFields = [
     { name: 'category', label: 'Kategoria', type: 'text', required: true },
@@ -28,7 +29,6 @@ const ManageGames = () => {
       axios.get('http://localhost:8000/api/games/categories')
           .then((response) => {
             setCategoryList(response.data.data);
-            console.log(response.data.data);
           });
     } catch(error){
       console.log(error.response.data);
@@ -38,15 +38,21 @@ const ManageGames = () => {
   const handleSetResult = async (game_id, result) => {
     try {
       const response = await axios.post(`http://localhost:8000/api/games/set-result/${game_id}`, {
-        result: result
+        result: result,
+        game_status: 'FINISHED'
       });
+
       if(response.data.status === 'ok') {
-        setBetsList(prevBets => ({
-          ...prevBets,
-          [game_id]: {
-            ...prevBets[game_id],
-            result: result
-          }
+        const updatedGame = {
+          ...betsList[game_id],
+          result: result,
+          game_status: 'FINISHED'
+        };
+
+        setFinishedGames(prev => new Map(prev).set(game_id, updatedGame));
+        setBetsList(prev => ({
+          ...prev,
+          [game_id]: updatedGame
         }));
       }
     } catch (error) {
@@ -69,10 +75,11 @@ const ManageGames = () => {
     }
 
     axios.post("http://localhost:8000/api/games/", data).then(res => {
-      console.log(res.data);
+      if (selectedEvent === data.event_name) {
+        handleSelectEvent(selectedCategory, selectedEvent);
+      }
     }).catch(err => {
-      console.log(err);
-      console.log(err.detail);
+      console.error(err);
     })
 
     setFormData({});
@@ -84,12 +91,26 @@ const ManageGames = () => {
 
     try {
       const response = await axios.get(`http://localhost:8000/api/games/${event}`);
-      setBetsList(response.data.data);
-      console.log(betsList);
-      console.log(Object.entries(betsList));
+      const newBetsList = response.data.data;
+
+      // Restore finished games that might not be in API response
+      finishedGames.forEach((game, id) => {
+        if (game.event_name === event) {
+          newBetsList[id] = game;
+        }
+      });
+
+      setBetsList(newBetsList);
     } catch (error) {
       console.error('Error fetching games:', error);
     }
+  };
+
+  const getResultDisplay = (betData) => {
+    if (!betData.result) return '-';
+    if (betData.result === 'One') return `Wygrana: ${betData.home}`;
+    if (betData.result === 'Two') return `Wygrana: ${betData.away}`;
+    return 'Remis';
   };
 
   return (
@@ -102,28 +123,31 @@ const ManageGames = () => {
               {selectedCategory || 'Wybierz kategorię'}
             </Dropdown.Toggle>
             <Dropdown.Menu>
-              {console.log(Object.entries(categoryList))}
               {Object.entries(categoryList).map(([category, events]) => (
-                  <>
-                    <Dropdown key={category}  drop="end" autoClose="outside">
-                      <Dropdown.Toggle className="dropdown-item">
-                        {category}
-                      </Dropdown.Toggle>
-                      <Dropdown.Menu>
-                        {events.map((event) => (
-                            <Dropdown.Item key={event}
-                                           onClick={() => handleSelectEvent(category, event)}>
-                              {event}
-                            </Dropdown.Item>
-                        ))}
-                      </Dropdown.Menu>
-                    </Dropdown>
-                  </>
+                  <Dropdown key={category} drop="end" autoClose="outside">
+                    <Dropdown.Toggle className="dropdown-item">
+                      {category}
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>
+                      {events.map((event) => (
+                          <Dropdown.Item
+                              key={event}
+                              onClick={() => handleSelectEvent(category, event)}
+                          >
+                            {event}
+                          </Dropdown.Item>
+                      ))}
+                    </Dropdown.Menu>
+                  </Dropdown>
               ))}
             </Dropdown.Menu>
           </Dropdown>
         </div>
-        <h1 className={"d-flex justify-content-center"}>{selectedCategory} {selectedCategory && '-'} {selectedEvent}</h1>
+
+        <h1 className="d-flex justify-content-center">
+          {selectedCategory} {selectedCategory && '-'} {selectedEvent}
+        </h1>
+
         <Table striped bordered hover>
           <thead>
           <tr>
@@ -134,6 +158,7 @@ const ManageGames = () => {
             <th>Kurs2</th>
             <th>KursX</th>
             <th>Status</th>
+            <th>Wynik</th>
             <th>Akcje</th>
           </tr>
           </thead>
@@ -147,9 +172,14 @@ const ManageGames = () => {
                 <td>{betData.odds2}</td>
                 <td>{betData.oddsX}</td>
                 <td>{betData.game_status}</td>
+                <td>{getResultDisplay(betData)}</td>
                 <td>
                   <Dropdown>
-                    <Dropdown.Toggle variant="primary" size="sm">
+                    <Dropdown.Toggle
+                        variant="primary"
+                        size="sm"
+                        disabled={betData.game_status === 'FINISHED'}
+                    >
                       Ustaw Wynik
                     </Dropdown.Toggle>
                     <Dropdown.Menu>
@@ -183,4 +213,4 @@ const ManageGames = () => {
   );
 };
 
-export default ManageGames;
+export default ManageGames
