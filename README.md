@@ -1,4 +1,9 @@
 # Betting App
+![Python](https://img.shields.io/badge/Python-3.11-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-0.95.0-blue)
+![React](https://img.shields.io/badge/React-18.2.0-lightblue)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-brightgreen)
+![Docker](https://img.shields.io/badge/Docker-Enabled-blue)
 
 ## Table of Contents
 - [General Info](#general-info)
@@ -13,7 +18,7 @@
 
 ## General Info
 
-This project was created as part of a Software Engineering course at Cracow University of Technology. The Betting App allows users to place bets, view odds, and manage their betting history.
+This project was developed as part of the Software Engineering course at the Cracow University of Technology. The Betting App allows users to place bets on various events, view betting odds, and manage their betting history through an intuitive user interface. The application is built using a modern tech stack, combining a powerful FastAPI backend with a dynamic React frontend. PostgreSQL is used as the database, which is containerized using Docker for easy setup and deployment.
 
 **_NOTE:_** _This project is for educational purposes only._
 
