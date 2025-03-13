@@ -18,7 +18,7 @@
 
 ## General Info
 
-This project was developed as part of the Software Engineering course at the Cracow University of Technology. The Betting App allows users to place bets on various events, view betting odds, and manage their betting history through an intuitive user interface. The application is built using a modern tech stack, combining a powerful FastAPI backend with a dynamic React frontend. PostgreSQL is used as the database, which is containerized using Docker for easy setup and deployment.
+This project was developed as part of the Software Engineering course at the Cracow University of Technology. The Betting App allows users to place bets on various events, view betting odds, and manage their betting history through an intuitive user interface. The application is built using a modern tech stack, combining a powerful FastAPI backend with a dynamic React frontend. PostgreSQL is used as the database, which is placed in Docker.
 
 **_NOTE:_** _This project is for educational purposes only._
 
